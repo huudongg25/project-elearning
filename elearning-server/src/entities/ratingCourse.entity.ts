@@ -21,6 +21,11 @@ export const RatingCourse = sequelize.define('ratingCourses',{
         type: DataTypes.TINYINT,
         allowNull: false
     },
+    isActive: {
+        type: DataTypes.TINYINT,
+        allowNull: false,
+        defaultValue: 1
+    }
 },{timestamps:true})
 
 RatingCourse.belongsTo(Course,{foreignKey: "courseId",onDelete:"CASCADE",onUpdate:"CASCADE"})

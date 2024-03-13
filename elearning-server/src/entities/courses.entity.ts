@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../configs/db.config";
+import { Category } from "./categories.entity";
 
 export const Course = sequelize.define('courses',{
     id: {
@@ -7,8 +8,8 @@ export const Course = sequelize.define('courses',{
         primaryKey: true,
         autoIncrement: true
     },
-    type: {
-        type: DataTypes.TINYINT,
+    categoryId: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
     level: {
@@ -36,28 +37,11 @@ export const Course = sequelize.define('courses',{
         allowNull: true,
         defaultValue: 0
     },
-    priority: {
-        type: DataTypes.SMALLINT,
-        allowNull: false
-    },
     price: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    isComingSoon: {
-        type: DataTypes.TINYINT,
-        allowNull: false
-    },
-    isFree: {
-        type: DataTypes.TINYINT,
-        allowNull: false
-    },
-    isSelling: {
-        type: DataTypes.TINYINT,
-        allowNull: false,
-        defaultValue: 1
-    },
-    isFinished: {
+    state: {
         type: DataTypes.TINYINT,
         allowNull: false,
         defaultValue: 0
@@ -67,3 +51,6 @@ export const Course = sequelize.define('courses',{
         allowNull: false
     },
 },{timestamps:true})
+
+Course.belongsTo(Category,{foreignKey: "categoryId", onDelete: "CASCADE", onUpdate: "CASCADE"})
+Category.hasMany(Course,{foreignKey: "categoryId"})
