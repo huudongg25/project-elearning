@@ -4,7 +4,7 @@ import { Sequelize } from 'sequelize';
 
 config();
 const sequelize = new Sequelize("project_elearning","root",String(process.env.DB_PASS),{
-    host: process.env.DB_HOST,
+    host: "localhost",
     dialect: 'mysql'
 })
 
