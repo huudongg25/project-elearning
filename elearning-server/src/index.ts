@@ -24,7 +24,7 @@ app.use(
     })
   );
 
-// routers(app)
+routers(app)
 // createEntity();
 sequelize.authenticate();
 app.listen(port, () => {

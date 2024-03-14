@@ -16,21 +16,7 @@ export const RegisteredCourse = sequelize.define('registeredCourses',{
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    progress: {
-        type: DataTypes.TINYINT,
-        allowNull: false,
-        defaultValue: 0
-    },
-    isFree: {
-        type: DataTypes.TINYINT,
-        allowNull: false,
-        defaultValue: 1
-    },
-    subTotal: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    finallyPrice: {
+    price: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
