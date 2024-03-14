@@ -7,5 +7,8 @@ export class UserRepository {
     }
     async getUserEmail(email:string): Promise<any>{
         return await User.findOne({where:{email}})
-    }   
+    }
+    async changePassword(email:string, password:string): Promise<void>{
+        await User.update({password},{where:{email}})
+    }
 }

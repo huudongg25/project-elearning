@@ -1,8 +1,47 @@
 import { UserRepository } from "../repositories/users.repository";
-
+import {Random} from 'random-js'
+import bcryptjs from 'bcryptjs'
+import transporter from "../configs/nodemailer.config";
 export class UserService {
     private _userRepository: UserRepository;
     constructor(){
         this._userRepository = new UserRepository
+    }
+
+    async createOTP(email:string):Promise<string> {
+        const user = await this._userRepository.getUserEmail(email);
+        if (!user) {
+            throw {status: 404, msg: "Email is not exist!"}
+        }else {
+            const random = new Random();
+            const otp = random.integer(10000,99999);
+            const salt = bcryptjs.genSaltSync(9);
+            const hashedOTP = bcryptjs.hashSync(String(otp), salt);
+            await transporter.sendMail({
+                bcc: email,
+                subject:"OTP Authentication",
+                html: `
+                    <p><strong>${otp}</strong></p>
+                    <p>OTP only lasts for 5 minutes</p>
+                    <p>Please do not share this OTP with anyone.</p>
+                `
+            })
+            return hashedOTP
+        } 
+    }
+
+    async confirmOTP(otpUi:number,otp:string): Promise<any> {
+        const checkOTP = bcryptjs.compareSync(String(otpUi), otp)
+        if (!checkOTP) {
+            throw {status: 400, msg: "OTP incorrect!"}
+        }else {
+            return {msg: "OTP Confirmed"}
+        }
+    }
+
+    async changePassword(email:string,password:string): Promise<void>{
+        const salt = bcryptjs.genSaltSync(9)
+        const hashedPassword = bcryptjs.hashSync(password, salt)
+        await this._userRepository.changePassword(email,hashedPassword)
     }
 }
