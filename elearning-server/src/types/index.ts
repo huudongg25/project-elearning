@@ -4,3 +4,12 @@ export interface IRegister {
     email: string
     password: string
 }
+export interface ICourse {
+    categoryId:number
+    level:number
+    courseName:string
+    description:string
+    completedContent:string
+    image:string
+    price:number
+}
