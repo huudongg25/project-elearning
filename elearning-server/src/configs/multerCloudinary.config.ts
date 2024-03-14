@@ -20,7 +20,7 @@ const storageAvatar = new CloudinaryStorage({
         }
     }
 })
-const storageProducts = new CloudinaryStorage({
+const storageImage = new CloudinaryStorage({
     cloudinary,
     params: async (req:express.Request,file:any) => {
         return {
@@ -39,7 +39,7 @@ const fileFilter = (req:express.Request, file:any, cb:Function) => {
 }
 
 export const uploadAvatar = multer({storage:storageAvatar,fileFilter})
-export const uploadProducts = multer({storage:storageProducts,fileFilter})
+export const uploadImage = multer({storage:storageImage,fileFilter})
 
 
 // Cú pháp sử dụng middleware upload ảnh 

@@ -11,4 +11,4 @@ export const Category = sequelize.define('categories',{
         type: DataTypes.STRING,
         allowNull: false
     }
-})
+},{timestamps:false})

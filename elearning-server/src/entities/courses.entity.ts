@@ -48,7 +48,7 @@ export const Course = sequelize.define('courses',{
     },
     publishedAt: {
         type: DataTypes.DATEONLY,
-        allowNull: false
+        allowNull: true
     },
 },{timestamps:true})
 
