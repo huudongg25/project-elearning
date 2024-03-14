@@ -1,5 +1,5 @@
 import { User } from "../entities/users.entity";
-import { IRegister } from "../types";
+
 
 export class UserRepository {
     async register(formRegister:any): Promise<void>{
@@ -10,5 +10,8 @@ export class UserRepository {
     }
     async changePassword(email:string, password:string): Promise<void>{
         await User.update({password},{where:{email}})
+    }
+    async updateProfile(id:number, formUpdate:any): Promise<void> {
+        await User.update(formUpdate,{where:{id}})
     }
 }
