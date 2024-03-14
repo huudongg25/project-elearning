@@ -2,15 +2,9 @@ import React from "react";
 import "./home.css";
 const Home = () => {
   return (
-    <main className="home_container">
+    <main className="home">
       <section>
-        <p>hahahaha</p>
-        <p>hahahaha</p>
-        <p>hahahaha</p>
-        <p>hahahaha</p>
-        <p>hahahaha</p>
-        <p>hahahaha</p>
-        <p>hahahaha</p>
+        <h1>nội dung home</h1>
       </section>
     </main>
   );
