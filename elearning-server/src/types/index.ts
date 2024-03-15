@@ -13,3 +13,7 @@ export interface ICourse {
     image:string
     price:number
 }
+export interface IRegisterCourse {
+    courseId:number
+    price:number
+}

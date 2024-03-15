@@ -46,34 +46,45 @@ courseController
       try {
         const id = Number(req.params.id);
         const fileImage = req.file as Express.Multer.File;
-        const formUpdate = req.body
-        await courseService.updateCourse(id,formUpdate,fileImage);
+        const formUpdate = req.body;
+        await courseService.updateCourse(id, formUpdate, fileImage);
         res.status(200).json({ msg: "Course updated" });
       } catch (error) {
         res.status(500).json({ msg: "Error updating Course: SERVER" });
       }
     }
   )
-//   Get Courses (search, sort, page)
-.get('/getall-courses', async (req:express.Request, res:express.Response) => {
-    try {
+  //   Get Courses (search, sort, page)
+  .get(
+    "/getall-courses",
+    async (req: express.Request, res: express.Response) => {
+      try {
         const search = String(req.query.search) || "";
         const sort = String(req.query.sort) || "";
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 5;
-        const result = await courseService.getAllCourses(search,sort,page,limit)
-        res.status(200).json(result)
-    } catch (error) {
-        res.status(500).json({msg: "Error getting all courses: SERVER"})
+        const result = await courseService.getAllCourses(
+          search,
+          sort,
+          page,
+          limit
+        );
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(500).json({ msg: "Error getting all courses: SERVER" });
+      }
     }
-})
-// Detail course
-.get('/detail-course/:id', async (req:express.Request, res: express.Response) => {
-    try {
+  )
+  // Detail course
+  .get(
+    "/detail-course/:id",
+    async (req: express.Request, res: express.Response) => {
+      try {
         const courseId = Number(req.params.id);
         const result = await courseService.getDetailCourse(courseId);
-        res.status(200).json(result)
-    } catch (error) {
-        res.status(500).json({msg:"Error getting detail course: SERVER"})
+        res.status(200).json(result);
+      } catch (error) {
+        res.status(500).json({ msg: "Error getting detail course: SERVER" });
+      }
     }
-})
+  )
