@@ -1,23 +1,28 @@
 export interface IRegister {
-    firstName: string
-    lastName: string
-    email: string
-    password: string
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
 }
 export interface ICourse {
-    categoryId:number
-    level:number
-    courseName:string
-    description:string
-    completedContent:string
-    image:string
-    price:number
+  categoryId: number;
+  level: number;
+  courseName: string;
+  description: string;
+  completedContent: string;
+  image: string;
+  price: number;
 }
 
 export interface ILesson {
-    courseId:number
-    title:string
-    position:number
-    duration:number
-    videoURL:string
+  courseId: number;
+  title: string;
+  position: number;
+  duration: number;
+  videoURL: string;
+}
+
+export interface IRegisterCourse {
+  courseId: number;
+  price: number;
 }
