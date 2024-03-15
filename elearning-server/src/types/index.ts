@@ -21,3 +21,7 @@ export interface ILesson {
     duration:number
     videoURL:string
 }
+export interface IRegisterCourse {
+    courseId:number
+    price:number
+}
