@@ -13,3 +13,11 @@ export interface ICourse {
     image:string
     price:number
 }
+
+export interface ILesson {
+    courseId:number
+    title:string
+    position:number
+    duration:number
+    videoURL:string
+}

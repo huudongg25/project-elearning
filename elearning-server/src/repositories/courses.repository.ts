@@ -16,12 +16,13 @@ export class CourseRepository {
   }
 
   async getAllCourses(
+    keySort: string,
     offset: number,
     limit: number,
     search: string,
     sort: string
   ): Promise<any> {
-    console.log(typeof search, typeof sort);
+    // console.log(typeof search, typeof sort);
     
     if (search === "undefined" && sort === "undefined") {
         return await Course.findAll({
@@ -42,7 +43,7 @@ export class CourseRepository {
     }
     if (search === "undefined" && sort !== "undefined") {
         return await Course.findAll({
-            order: [["studentCount", sort]]
+            order: [[keySort, sort]]
         })
     }
     if (search !== "undefined" && sort !== "undefined") {
@@ -52,7 +53,7 @@ export class CourseRepository {
                     [Op.like]: `%${search}%`
                 }
             },
-            order: [["studentCount", sort]]
+            order: [[keySort, sort]]
         })
     }
   }
