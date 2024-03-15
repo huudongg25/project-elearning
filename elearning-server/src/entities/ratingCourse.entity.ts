@@ -24,7 +24,7 @@ export const RatingCourse = sequelize.define('ratingCourses',{
     isActive: {
         type: DataTypes.TINYINT,
         allowNull: false,
-        defaultValue: 1
+        defaultValue: 0
     }
 },{timestamps:true})
 
