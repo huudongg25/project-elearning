@@ -13,8 +13,6 @@ registerCourseController
         await registerCourseService.create(userId, form);
         res.status(201).json({msg:"Created register course"})
     } catch (error) {
-        console.log(error);
-        
         res.status(500).json({msg:'Error creating course: SERVER'})
     }
 })
