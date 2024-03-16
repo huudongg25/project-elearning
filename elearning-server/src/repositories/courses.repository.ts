@@ -2,6 +2,8 @@ import { Op } from "sequelize";
 import { Course } from "../entities/courses.entity";
 import { Lesson } from "../entities/lessons.entity";
 import { Category } from "../entities/categories.entity";
+import { RatingCourse } from "../entities/ratingCourse.entity";
+import { CommentCourse } from "../entities/commentCourse.entity";
 
 export class CourseRepository {
   async createCourse(formCourse: any): Promise<void> {
@@ -23,47 +25,52 @@ export class CourseRepository {
     sort: string
   ): Promise<any> {
     // console.log(typeof search, typeof sort);
-    
+
     if (search === "undefined" && sort === "undefined") {
-        return await Course.findAll({
-            offset: offset,
-            limit: limit
-        });
+      return await Course.findAll({
+        offset: offset,
+        limit: limit,
+      });
     }
     if (search !== "undefined" && sort === "undefined") {
-        return await Course.findAll({
-            offset: offset,
-            limit: limit,
-            where: {
-                courseName: {
-                    [Op.like]: `%${search}%`
-                }
-            }
-        })
+      return await Course.findAll({
+        offset: offset,
+        limit: limit,
+        where: {
+          courseName: {
+            [Op.like]: `%${search}%`,
+          },
+        },
+      });
     }
     if (search === "undefined" && sort !== "undefined") {
-        return await Course.findAll({
-            order: [[keySort, sort]]
-        })
+      return await Course.findAll({
+        order: [[keySort, sort]],
+      });
     }
     if (search !== "undefined" && sort !== "undefined") {
-        return await Course.findAll({
-            where: {
-                courseName: {
-                    [Op.like]: `%${search}%`
-                }
-            },
-            order: [[keySort, sort]]
-        })
+      return await Course.findAll({
+        where: {
+          courseName: {
+            [Op.like]: `%${search}%`,
+          },
+        },
+        order: [[keySort, sort]],
+      });
     }
   }
 
   async getDetailCourse(id: number): Promise<any> {
     return await Course.findAll({
-        include:[{model:Lesson},{model:Category}],
-        where: {
-            id: id
-        }
+      include: [
+        { model: Lesson },
+        { model: Category },
+        { model: RatingCourse },
+        { model: CommentCourse },
+      ],
+      where: {
+        id: id,
+      },
     });
   }
 }

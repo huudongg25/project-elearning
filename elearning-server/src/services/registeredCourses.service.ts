@@ -9,11 +9,10 @@ export class RegisterCourseService {
         this._registerCourseRepository = new RegisterCourseRepository();
     }
 
-    async create(userId:number, form:IRegisterCourse){
+    async create(form:IRegisterCourse){
         const codePayment = uuidv1();
         const newForm = {
             ...form,
-             userId,
              codePayment
         }
         await this._registerCourseRepository.create(newForm)

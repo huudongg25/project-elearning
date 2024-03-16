@@ -23,6 +23,17 @@ export interface ILesson {
 }
 
 export interface IRegisterCourse {
+  userId:number;
   courseId: number;
   price: number;
+}
+export interface IRate {
+  courseId: number;
+  userId: number;
+  rateStar: number;
+}
+export interface IComment {
+  courseId: number;
+  userId: number;
+  content: string;
 }
