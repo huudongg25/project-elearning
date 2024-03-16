@@ -21,6 +21,10 @@ export const RatingCourse = sequelize.define('ratingCourses',{
         type: DataTypes.TINYINT,
         allowNull: false
     },
+    content: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     isActive: {
         type: DataTypes.TINYINT,
         allowNull: false,

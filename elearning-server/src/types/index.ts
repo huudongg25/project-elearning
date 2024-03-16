@@ -31,6 +31,7 @@ export interface IRate {
   courseId: number;
   userId: number;
   rateStar: number;
+  content: string;
 }
 export interface IComment {
   courseId: number;

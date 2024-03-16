@@ -17,4 +17,9 @@ export class RegisterCourseService {
         }
         await this._registerCourseRepository.create(newForm)
     }
+
+    async getAll(keySort:string,search:string,sort:string,page:number,limit:number){
+        const offset = Math.ceil((page - 1) * limit);
+        return await this._registerCourseRepository.getAll(keySort,search,sort,offset,limit)
+    }
 }
