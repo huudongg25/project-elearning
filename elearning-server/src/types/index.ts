@@ -38,3 +38,11 @@ export interface IComment {
   userId: number;
   content: string;
 }
+export interface IAdmin {
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  role: number;
+  avatar: string;
+}
