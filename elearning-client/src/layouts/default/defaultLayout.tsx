@@ -1,8 +1,8 @@
 import React from "react";
 import "./defaultLayout.css";
-import Header from "../../components/header/header";
-import Footer from "../../components/footer/footer";
-import Sidebar from "../../components/sidebar/sidebar";
+import Header from "../../components/home/header/header";
+import Footer from "../../components/home/footer/footer";
+import Sidebar from "../../components/home/sidebar/sidebar";
 interface Props {
   child: JSX.Element;
 }

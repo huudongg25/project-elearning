@@ -1,0 +1,22 @@
+.course_sidebar_container {
+    overflow-y: scroll;
+    height: 100vh;
+    list-style: decimal;
+    font-weight: 600;
+}
+
+.course_sidebar_container ol {
+    padding: 15px 25px;
+    font-size: 20px;
+}
+
+.course_sidebar_container li {
+    padding: 15px 25px;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid rgb(215, 215, 215);
+}
+
+.course_sidebar_container li:hover {
+    cursor: pointer;
+    background-color: #eeeeee;
+}

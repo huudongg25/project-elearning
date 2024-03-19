@@ -29,26 +29,37 @@ ol {
     flex-direction: column;
 }
 
-.sidebar_course_layout {
+.header_course_layout {
     position: fixed;
-    width: 96px;
-    top: 66px;
+    top: 0;
     left: 0;
+    right: 0;
+    background-color: #29303B;
+    height: 60px;
+    padding: 10px;
 }
 
-.child {
-    width: 100vw;
+.course_child {
     overflow-y: scroll;
     min-height: 100vh;
-    margin-top: 66px;
-    margin-left: 96px;
+    margin-top: 60px;
+    margin-right: 300px;
+    padding: 0;
+}
+
+.sidebar_course_layout {
+    position: fixed;
+    width: 300px;
+    top: 60px;
+    right: 0;
 }
 
 .footer_course_layout {
-    min-height: 400px;
+    min-height: 50px;
     width: 100vw;
-    background-color: #181821;
-    color: #a9b3bb;
+    background-color: #F0F0F0;
     overflow: hidden;
-    padding: 40px 0 40px;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
 }

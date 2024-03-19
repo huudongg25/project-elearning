@@ -1,7 +1,8 @@
 import React from "react";
 import "./coursesLayout.css";
-import Header from "../../components/courseHeader/header";
-import Footer from "../../components/courseFooter/footer";
+import CourseSidebar from "../../components/course/courseSidebar/courseSidebar";
+import CourseFooter from "../../components/course/courseFooter/footer";
+import CourseHeader from "../../components/course/courseHeader/header";
 
 interface Props {
   child: JSX.Element;
@@ -10,11 +11,14 @@ const CoursesLayout = (props: Props): JSX.Element => {
   return (
     <div className="course_layout">
       <div className="header_course_layout">
-        <Header />
+        <CourseHeader />
       </div>
-      <div className="child">{props.child}</div>
+      <div className="sidebar_course_layout">
+        <CourseSidebar />
+      </div>
+      <div className="course_child">{props.child}</div>
       <div className="footer_course_layout">
-        <Footer />
+        <CourseFooter />
       </div>
     </div>
   );
