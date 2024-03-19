@@ -38,6 +38,7 @@ export interface IComment {
   userId: number;
   content: string;
 }
+<<<<<<< Updated upstream
 export interface IAdmin {
   username: string;
   password: string;
@@ -45,4 +46,9 @@ export interface IAdmin {
   lastName: string;
   role: number;
   avatar: string;
+=======
+export interface IError {
+  status: number;
+  msg: string;
+>>>>>>> Stashed changes
 }

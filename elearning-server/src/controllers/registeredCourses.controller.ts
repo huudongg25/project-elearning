@@ -1,31 +1,63 @@
-import express from 'express';
-import { RegisterCourseService } from '../services/registeredCourses.service';
+import express from "express";
+import { RegisterCourseService } from "../services/registeredCourses.service";
+import { StatusCode } from "../common/variableResponse.common";
+import { MessageCodeResponse } from "../common/messageResponse.common";
 
 export const registerCourseController = express.Router();
 const registerCourseService = new RegisterCourseService();
-
+const msg = new MessageCodeResponse();
 registerCourseController
-// Create
-.post('/create', async (req:express.Request, res:express.Response) => {
+  // Create
+  .post("/create", async (req: express.Request, res: express.Response) => {
     try {
-        const form = req.body
-        await registerCourseService.create(form);
-        res.status(201).json({msg:"Created register course"})
+      const form = req.body;
+      await registerCourseService.create(form);
+      res
+        .status(StatusCode.CREATED)
+        .json({ msg: msg.CREATED("REGISTER COURSE") });
     } catch (error) {
-        res.status(500).json({msg:'Error creating course: SERVER'})
+      res
+        .status(StatusCode.INTERNAL_SERVER_ERROR)
+        .json({ msg: msg.INTERNAL_SERVER_ERROR("REGISTER COURSE") });
     }
-})
-// Get all
-.get('/get-all', async (req:express.Request, res:express.Response) => {
+  })
+  // Get all
+  .get("/get-all", async (req: express.Request, res: express.Response) => {
     try {
-        const search = String(req.query.search) || "";
-        const sort = String(req.query.sort) || "";
-        const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 5;
-        const keySort = String(req.query.key);
-        const result = await registerCourseService.getAll(keySort,search,sort,page,limit);
-        res.status(200).json(result);
+      const search = String(req.query.search) || "";
+      const sort = String(req.query.sort) || "";
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 5;
+      const keySort = String(req.query.key);
+      const result = await registerCourseService.getAll(
+        keySort,
+        search,
+        sort,
+        page,
+        limit
+      );
+      res
+        .status(StatusCode.OK)
+        .json({ msg: msg.GET("REGISTERS COURSE"), data: result });
     } catch (error) {
-        res.status(500).json({msg:'Error getting registeredCourse: SERVER'})
+      res
+        .status(StatusCode.INTERNAL_SERVER_ERROR)
+        .json({ msg: msg.INTERNAL_SERVER_ERROR("GET ALL REGISTER COURSE") });
     }
-})
+  })
+  // Thong ke doanh thu theo thang
+  .get("/revenue", async (req: express.Request, res: express.Response) => {
+    try {
+      const month = String(req.query.month) || "";
+      const year = String(req.query.year) || "";
+      const quarter = String(req.query.quarter) || "";
+      const result = await registerCourseService.revenue(month, year, quarter);
+      res
+        .status(StatusCode.OK)
+        .json({ msg: msg.GET("REVENUE"), revenue: result });
+    } catch (error) {
+      res
+        .status(StatusCode.INTERNAL_SERVER_ERROR)
+        .json({ msg: msg.INTERNAL_SERVER_ERROR("REVENUE") });
+    }
+  });

@@ -1,19 +1,23 @@
 import express from "express";
 import { RateService } from "../services/rates.service";
 import { IRate } from "../types";
+import { StatusCode } from "../common/variableResponse.common";
+import { MessageCodeResponse } from "../common/messageResponse.common";
 
 export const rateController = express.Router();
 const rateService = new RateService();
-
+const msg = new MessageCodeResponse();
 rateController
   // Create Rate
   .post("/create", async (req: express.Request, res: express.Response) => {
     try {
       const form: IRate = req.body;
       await rateService.create(form);
-      res.status(201).json({ msg: "Created rate" });
+      res.status(StatusCode.CREATED).json({ msg: msg.CREATED("RATE COURSE") });
     } catch (error) {
-      res.status(500).json({ msg: "Error creating rate: SERVER" });
+      res
+        .status(StatusCode.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Error creating rate: SERVER" });
     }
   })
   // isActive
@@ -21,9 +25,11 @@ rateController
     try {
       const rateId = Number(req.params.id);
       await rateService.active(rateId);
-      res.status(200).json({ msg: "Active rate" });
+      res.status(StatusCode.OK).json({ msg: msg.UPDATE("RATE COURSE") });
     } catch (error) {
-      res.status(500).json({ msg: "Error active rate: SERVER" });
+      res
+        .status(StatusCode.INTERNAL_SERVER_ERROR)
+        .json({ msg: msg.INTERNAL_SERVER_ERROR("UPDATE RATE COURSE") });
     }
   })
   // Delete rate
@@ -33,9 +39,11 @@ rateController
       try {
         const rateId = Number(req.params.id);
         await rateService.delete(rateId);
-        res.status(200).json({ msg: "Deleted rate" });
+        res.status(StatusCode.OK).json({ msg: msg.DELETE("RATE COURSE") });
       } catch (error) {
-        res.status(500).json({ msg: "Error deleting rate: SERVER" });
+        res
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ msg: msg.INTERNAL_SERVER_ERROR("DELETE RATE COURSE") });
       }
     }
   )
@@ -43,8 +51,10 @@ rateController
   .get("/get-all", async (req: express.Request, res: express.Response) => {
     try {
       const result = await rateService.getAll();
-      res.status(200).json(result);
+      res.status(StatusCode.OK).json({ msg: msg.GET("RATES COURSE"), data: result });
     } catch (error) {
-      res.status(500).json({ msg: "Error getting rates: SERVER" });
+      res
+        .status(StatusCode.INTERNAL_SERVER_ERROR)
+        .json({ msg: msg.INTERNAL_SERVER_ERROR("GET RATES COURSE") });
     }
   });

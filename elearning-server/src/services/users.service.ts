@@ -2,6 +2,9 @@ import { UserRepository } from "../repositories/users.repository";
 import { Random } from "random-js";
 import bcryptjs from "bcryptjs";
 import transporter from "../configs/nodemailer.config";
+import { StatusCode } from "../common/variableResponse.common";
+import { MessageCodeResponse } from "../common/messageResponse.common";
+const msg = new MessageCodeResponse();
 export class UserService {
   private _userRepository: UserRepository;
   constructor() {
@@ -11,7 +14,7 @@ export class UserService {
   async createOTP(email: string): Promise<string> {
     const user = await this._userRepository.getUserEmail(email);
     if (!user) {
-      throw { status: 404, msg: "Email is not exist!" };
+      throw { status: StatusCode.NOT_FOUND, msg: msg.NOT_FOUND("EMAIL") };
     } else {
       const random = new Random();
       const otp = random.integer(10000, 99999);
@@ -33,9 +36,9 @@ export class UserService {
   async confirmOTP(otpUi: number, otp: string): Promise<any> {
     const checkOTP = bcryptjs.compareSync(String(otpUi), otp);
     if (!checkOTP) {
-      throw { status: 400, msg: "OTP incorrect!" };
+      throw { status: StatusCode.BAD_REQUEST, msg: msg.INCORRECT("OTP") };
     } else {
-      return { msg: "OTP Confirmed" };
+      return { msg: "OTP CONFIRMED" };
     }
   }
 

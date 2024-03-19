@@ -1,9 +1,11 @@
 import express from "express";
 import { CourseService } from "../services/courses.service";
 import { uploadImage } from "../configs/multerCloudinary.config";
+import { StatusCode } from "../common/variableResponse.common";
+import { MessageCodeResponse } from "../common/messageResponse.common";
 export const courseController = express.Router();
 const courseService = new CourseService();
-
+const msg = new MessageCodeResponse();
 courseController
   // Create Course
   .post(
@@ -19,9 +21,13 @@ courseController
         };
         const fileImage = req.file as Express.Multer.File;
         await courseService.createCourse(formCourse, fileImage);
-        res.status(201).json({ msg: "Course created" });
+        res.status(StatusCode.CREATED).json({ msg: msg.CREATED("COURSE") });
       } catch (error) {
-        res.status(500).json({ msg: "Error creating course: SERVER" });
+        console.log(error);
+        
+        res
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ msg: msg.INTERNAL_SERVER_ERROR("COURSE") });
       }
     }
   )
@@ -32,9 +38,11 @@ courseController
       try {
         const id = Number(req.params.id);
         await courseService.deleteCourse(id);
-        res.status(200).json({ msg: "Course deleted" });
+        res.status(StatusCode.OK).json({ msg: msg.DELETE("COURSE") });
       } catch (error) {
-        res.status(500).json({ msg: "Error deleting Course: SERVER" });
+        res
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ msg: msg.INTERNAL_SERVER_ERROR("COURSE DELETE") });
       }
     }
   )
@@ -48,9 +56,11 @@ courseController
         const fileImage = req.file as Express.Multer.File;
         const formUpdate = req.body;
         await courseService.updateCourse(id, formUpdate, fileImage);
-        res.status(200).json({ msg: "Course updated" });
+        res.status(StatusCode.OK).json({ msg: msg.UPDATE("COURSE") });
       } catch (error) {
-        res.status(500).json({ msg: "Error updating Course: SERVER" });
+        res
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ msg: msg.INTERNAL_SERVER_ERROR("COURSE UPDATE") });
       }
     }
   )
@@ -71,9 +81,11 @@ courseController
           page,
           limit
         );
-        res.status(200).json(result);
+        res.status(StatusCode.OK).json({ msg: msg.GET("COURSES"), data: result });
       } catch (error) {
-        res.status(500).json({ msg: "Error getting all courses: SERVER" });
+        res
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ msg: msg.INTERNAL_SERVER_ERROR("GET ALL COURSES") });
       }
     }
   )
@@ -84,9 +96,13 @@ courseController
       try {
         const courseId = Number(req.params.id);
         const result = await courseService.getDetailCourse(courseId);
-        res.status(200).json(result);
+        res
+          .status(StatusCode.OK)
+          .json({ msg: msg.GET("COURSE DETAIL"), data: result });
       } catch (error) {
-        res.status(500).json({ msg: "Error getting detail course: SERVER" });
+        res
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ msg: msg.INTERNAL_SERVER_ERROR("GET DETAIL COURSE") });
       }
     }
   );
