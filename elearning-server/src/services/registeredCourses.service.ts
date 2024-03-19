@@ -22,4 +22,15 @@ export class RegisterCourseService {
         const offset = Math.ceil((page - 1) * limit);
         return await this._registerCourseRepository.getAll(keySort,search,sort,offset,limit)
     }
+
+    async revenue(month:string,year:string,quarter:string){
+        const result =  await this._registerCourseRepository.revenue(month,year,quarter)
+        if (result) {
+            const data = result[0]
+            const revenue = data.reduce((init:number, item:any) => init + item.price ,0)
+            return revenue
+        }else {
+            return 0
+        }
+    }
 }
