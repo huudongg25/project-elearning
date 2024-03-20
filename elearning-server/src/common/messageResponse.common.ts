@@ -26,4 +26,7 @@ export class MessageCodeResponse {
     UNAUTHORIZED():string{
         return MessageCode.UNAUTHORIZED
     }
+    FORBIDDEN():string{
+        return MessageCode.FORBIDDEN
+    }
 }

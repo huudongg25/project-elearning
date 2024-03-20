@@ -15,9 +15,18 @@ export class CommentCourseRepository {
     await CommentCourse.destroy({ where: { id } });
   }
 
-  async getAll(): Promise<any> {
-    return await CommentCourse.findAll({
-      include: [{ model: User }, { model: Course }],
-    });
+  async getAll(key: string): Promise<any> {
+    if (key === "admin") {
+      return await CommentCourse.findAll({
+        include: [{ model: User }, { model: Course }],
+      });
+    } else if (key === "user") {
+      return await CommentCourse.findAll({
+        include: [{ model: User }, { model: Course }],
+        where: {
+          isActive: 1,
+        },
+      });
+    }
   }
 }

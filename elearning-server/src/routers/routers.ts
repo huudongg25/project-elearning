@@ -6,6 +6,7 @@ import { lessonController } from '../controllers/lessons.controller';
 import { registerCourseController } from '../controllers/registeredCourses.controller';
 import { rateController } from '../controllers/rates.controller';
 import { commentCourseController } from '../controllers/commentCourses.controller';
+import { adminController } from '../controllers/admins.controller';
 export const routers = (app:Express) => {
     app.use('/auth',authController);
     app.use('/users',userController);
@@ -14,4 +15,5 @@ export const routers = (app:Express) => {
     app.use('/register-courses',registerCourseController);
     app.use('/rates',rateController);
     app.use('/comments',commentCourseController);
+    app.use('/admins',adminController);
 }

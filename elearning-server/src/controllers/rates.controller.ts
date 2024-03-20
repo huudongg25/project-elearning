@@ -3,13 +3,14 @@ import { RateService } from "../services/rates.service";
 import { IRate } from "../types";
 import { StatusCode } from "../common/variableResponse.common";
 import { MessageCodeResponse } from "../common/messageResponse.common";
+import { Authorization } from "../middlewares/auth.middleware";
 
 export const rateController = express.Router();
 const rateService = new RateService();
 const msg = new MessageCodeResponse();
 rateController
   // Create Rate
-  .post("/create", async (req: express.Request, res: express.Response) => {
+  .post("/create",Authorization, async (req: express.Request, res: express.Response) => {
     try {
       const form: IRate = req.body;
       await rateService.create(form);
@@ -21,7 +22,7 @@ rateController
     }
   })
   // isActive
-  .patch("/active/:id", async (req: express.Request, res: express.Response) => {
+  .patch("/active/:id",Authorization ,async (req: express.Request, res: express.Response) => {
     try {
       const rateId = Number(req.params.id);
       await rateService.active(rateId);
@@ -34,7 +35,7 @@ rateController
   })
   // Delete rate
   .delete(
-    "/delete/:id",
+    "/delete/:id",Authorization,
     async (req: express.Request, res: express.Response) => {
       try {
         const rateId = Number(req.params.id);
@@ -50,7 +51,8 @@ rateController
   // Get all rates
   .get("/get-all", async (req: express.Request, res: express.Response) => {
     try {
-      const result = await rateService.getAll();
+      const key = String(req.query.key)
+      const result = await rateService.getAll(key);
       res.status(StatusCode.OK).json({ msg: msg.GET("RATES COURSE"), data: result });
     } catch (error) {
       res

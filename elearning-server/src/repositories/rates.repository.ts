@@ -15,9 +15,19 @@ export class RateRepository {
     await RatingCourse.destroy({ where: { id } });
   }
 
-  async getAll(): Promise<any> {
-    return await RatingCourse.findAll({
-      include: [{ model: User }, { model: Course }],
-    });
+  async getAll(key:string): Promise<any> {
+    if (key === "admin") {
+      
+      return await RatingCourse.findAll({
+        include: [{ model: User }, { model: Course }],
+      });
+    }else if(key === "user"){
+      return await RatingCourse.findAll({
+        include: [{ model: User }, { model: Course }],
+        where: {
+          isActive: 1
+        }
+      })
+    }
   }
 }

@@ -19,7 +19,7 @@ export class CommentCourseService {
     await this._commentCourseRepository.delete(commentId);
   }
 
-  async getAll(): Promise<any> {
-    return await this._commentCourseRepository.getAll();
+  async getAll(key:string): Promise<any> {
+    return await this._commentCourseRepository.getAll(key);
   }
 }

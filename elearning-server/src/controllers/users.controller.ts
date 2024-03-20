@@ -3,6 +3,7 @@ import { UserService } from "../services/users.service";
 import { uploadAvatar } from "../configs/multerCloudinary.config";
 import { StatusCode } from "../common/variableResponse.common";
 import { MessageCodeResponse } from "../common/messageResponse.common";
+import { Authorization } from "../middlewares/auth.middleware";
 export const userController = express.Router();
 
 const userService = new UserService();
@@ -70,6 +71,7 @@ userController
   // Update profile User
   .patch(
     "/update-profile/:id",
+    Authorization,
     uploadAvatar.single("avatar"),
     async (req: express.Request, res: express.Response) => {
       try {
@@ -86,7 +88,7 @@ userController
     }
   )
   // Block & Block comment User
-  .patch("/block/:id", async (req: express.Request, res: express.Response) => {
+  .patch("/block/:id",Authorization, async (req: express.Request, res: express.Response) => {
     try {
       const id = Number(req.params.id);
       const key = req.query.key;
@@ -100,7 +102,7 @@ userController
   })
   // Unblock & Unblock comment User
   .patch(
-    "/unblock/:id",
+    "/unblock/:id",Authorization,
     async (req: express.Request, res: express.Response) => {
       try {
         const id = Number(req.params.id);

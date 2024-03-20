@@ -2,13 +2,14 @@ import express from "express";
 import { RegisterCourseService } from "../services/registeredCourses.service";
 import { StatusCode } from "../common/variableResponse.common";
 import { MessageCodeResponse } from "../common/messageResponse.common";
+import { Authorization } from "../middlewares/auth.middleware";
 
 export const registerCourseController = express.Router();
 const registerCourseService = new RegisterCourseService();
 const msg = new MessageCodeResponse();
 registerCourseController
   // Create
-  .post("/create", async (req: express.Request, res: express.Response) => {
+  .post("/create", Authorization,async (req: express.Request, res: express.Response) => {
     try {
       const form = req.body;
       await registerCourseService.create(form);
