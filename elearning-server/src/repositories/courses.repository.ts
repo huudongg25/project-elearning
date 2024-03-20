@@ -24,8 +24,6 @@ export class CourseRepository {
     search: string,
     sort: string
   ): Promise<any> {
-    // console.log(typeof search, typeof sort);
-
     if (search === "undefined" && sort === "undefined") {
       return await Course.findAll({
         offset: offset,
@@ -45,11 +43,15 @@ export class CourseRepository {
     }
     if (search === "undefined" && sort !== "undefined") {
       return await Course.findAll({
+        offset: offset,
+        limit: limit,
         order: [[keySort, sort]],
       });
     }
     if (search !== "undefined" && sort !== "undefined") {
       return await Course.findAll({
+        offset: offset,
+        limit: limit,
         where: {
           courseName: {
             [Op.like]: `%${search}%`,

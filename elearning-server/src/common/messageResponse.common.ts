@@ -29,4 +29,7 @@ export class MessageCodeResponse {
     FORBIDDEN():string{
         return MessageCode.FORBIDDEN
     }
+    IS_EXISTING(value:string):string{
+        return value + " " + MessageCode.IS_EXIST
+    }
 }

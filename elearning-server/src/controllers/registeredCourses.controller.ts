@@ -41,6 +41,8 @@ registerCourseController
         .status(StatusCode.OK)
         .json({ msg: msg.GET("REGISTERS COURSE"), data: result });
     } catch (error) {
+      console.log(error);
+      
       res
         .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ msg: msg.INTERNAL_SERVER_ERROR("GET ALL REGISTER COURSE") });
@@ -61,4 +63,18 @@ registerCourseController
         .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ msg: msg.INTERNAL_SERVER_ERROR("REVENUE") });
     }
-  });
+  })
+  // Get by user
+  .get('/get/:id', async (req: express.Request, res:express.Response) => {
+    try {
+      const id = Number(req.params.id);
+      const result = await registerCourseService.getByUser(id);
+      res
+      .status(StatusCode.OK)
+      .json({ msg: msg.GET("REGISTER COURSE BY USER"), data: result });
+    } catch (error) {
+      res
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json({ msg: msg.INTERNAL_SERVER_ERROR("GET REGISTER COURSE BY USER") });
+    }
+  })

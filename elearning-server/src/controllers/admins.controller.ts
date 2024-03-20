@@ -5,6 +5,7 @@ import { StatusCode } from "../common/variableResponse.common";
 import { MessageCodeResponse } from "../common/messageResponse.common";
 import { Authorization } from "../middlewares/auth.middleware";
 import { checkRole } from "../middlewares/checkRole.middleware";
+import checkUsernameCreate from "../middlewares/checkUsernameCreate.middleware";
 
 export const adminController = express.Router();
 const adminService = new AdminService();
@@ -34,6 +35,7 @@ adminController
     "/create",
     Authorization,
     checkRole,
+    checkUsernameCreate,
     async (req: express.Request, res: express.Response) => {
       try {
         const form = req.body

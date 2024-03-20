@@ -13,7 +13,7 @@ const checkUsernameCreate = async (
     const username = req.body.username;
     const result = await adminRepository.getAdminByUsername(username);
     if (result) {
-      res.status(StatusCode.NOT_FOUND).json({ msg: msg.NOT_FOUND("USERNAME") });
+      res.status(StatusCode.NOT_FOUND).json({ msg: msg.IS_EXISTING("USERNAME") });
     } else {
       next();
     }

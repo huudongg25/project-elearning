@@ -33,4 +33,8 @@ export class RegisterCourseService {
             return 0
         }
     }
+
+    async getByUser (id:number) {
+        return await this._registerCourseRepository.getByUser(id)
+    }
 }
