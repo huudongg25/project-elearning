@@ -54,7 +54,10 @@ commentCourseController
   .get("/get-all", async (req: express.Request, res: express.Response) => {
     try {
       const key = String(req.query.key)
-      const result = await commentCourseService.getAll(key);
+      const page = Number(req.query.page) || 1
+      const limit = Number(req.query.limit) || 3
+      const courseId = Number(req.query.courseId) || undefined
+      const result = await commentCourseService.getAll(key,page,limit,courseId);
       res
         .status(StatusCode.OK)
         .json({ msg: msg.GET("ALL COMMENTS COURSE"), data: result });
@@ -63,4 +66,4 @@ commentCourseController
         .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ msg: msg.INTERNAL_SERVER_ERROR("GET ALL COMMENTS COURSE") });
     }
-  });
+  })

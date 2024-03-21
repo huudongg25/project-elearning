@@ -88,21 +88,26 @@ userController
     }
   )
   // Block & Block comment User
-  .patch("/block/:id",Authorization, async (req: express.Request, res: express.Response) => {
-    try {
-      const id = Number(req.params.id);
-      const key = req.query.key;
-      await userService.block(id, key);
-      res.status(StatusCode.OK).json({ msg: msg.UPDATE("BLOCK USER") });
-    } catch (error) {
-      res
-        .status(StatusCode.INTERNAL_SERVER_ERROR)
-        .json({ msg: msg.INTERNAL_SERVER_ERROR("BLOCK USER") });
+  .patch(
+    "/block/:id",
+    Authorization,
+    async (req: express.Request, res: express.Response) => {
+      try {
+        const id = Number(req.params.id);
+        const key = req.query.key;
+        await userService.block(id, key);
+        res.status(StatusCode.OK).json({ msg: msg.UPDATE("BLOCK USER") });
+      } catch (error) {
+        res
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ msg: msg.INTERNAL_SERVER_ERROR("BLOCK USER") });
+      }
     }
-  })
+  )
   // Unblock & Unblock comment User
   .patch(
-    "/unblock/:id",Authorization,
+    "/unblock/:id",
+    Authorization,
     async (req: express.Request, res: express.Response) => {
       try {
         const id = Number(req.params.id);
@@ -113,6 +118,26 @@ userController
         res
           .status(StatusCode.INTERNAL_SERVER_ERROR)
           .json({ msg: msg.INTERNAL_SERVER_ERROR("UNBLOCK USER") });
+      }
+    }
+  )
+  // Logout
+  .get(
+    "/logout",
+    Authorization,
+    async (req: express.Request, res: express.Response) => {
+      try {
+        req.session.destroy((error: any) => {
+          if (error) {
+            res.status(400).json({ msg: "SESSION DESTROY ERROR" });
+          } else {
+            res.status(StatusCode.OK).json({ msg: "LOGOUT SUCCESS" });
+          }
+        });
+      } catch (error) {
+        res
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ msg: msg.INTERNAL_SERVER_ERROR("LOGOUT") });
       }
     }
   );

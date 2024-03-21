@@ -83,4 +83,24 @@ adminController
           .json({ msg: msg.INTERNAL_SERVER_ERROR("UPDATE ADMIN") });
       }
     }
+  )
+  // Logout
+  .get(
+    "/logout",
+    Authorization,
+    async (req: express.Request, res: express.Response) => {
+      try {
+        req.session.destroy((error: any) => {
+          if (error) {
+            res.status(400).json({ msg: "SESSION DESTROY ERROR" });
+          } else {
+            res.status(StatusCode.OK).json({ msg: "LOGOUT SUCCESS" });
+          }
+        });
+      } catch (error) {
+        res
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ msg: msg.INTERNAL_SERVER_ERROR("LOGOUT") });
+      }
+    }
   );

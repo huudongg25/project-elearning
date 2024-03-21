@@ -14,4 +14,8 @@ export class UserRepository {
     async updateProfile(id:number, formUpdate:any): Promise<void> {
         await User.update(formUpdate,{where:{id}})
     }
+
+    async getById(id:number){
+        return await User.findOne({where:{id}})
+    }
 }

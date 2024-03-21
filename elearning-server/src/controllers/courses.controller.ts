@@ -11,7 +11,7 @@ const msg = new MessageCodeResponse();
 courseController
   // Create Course
   .post(
-    "/create-course",
+    "/create",
     Authorization,
     checkRole,
     uploadImage.single("image"),
@@ -37,7 +37,7 @@ courseController
   )
   // Delete Course
   .delete(
-    "/delete-course/:id",
+    "/delete/:id",
     Authorization,
     checkRole,
     async (req: express.Request, res: express.Response) => {
@@ -54,7 +54,7 @@ courseController
   )
   // Update Course
   .patch(
-    "/update-course/:id",
+    "/update/:id",
     Authorization,
     uploadImage.single("image"),
     async (req: express.Request, res: express.Response) => {
@@ -73,7 +73,7 @@ courseController
   )
   //   Get Courses (search, sort, page)
   .get(
-    "/getall-courses",
+    "/get-all",
     async (req: express.Request, res: express.Response) => {
       try {
         const search = String(req.query.search) || "";
@@ -81,7 +81,9 @@ courseController
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 5;
         const keySort = String(req.query.key);
+        const role = String(req.query.role);
         const result = await courseService.getAllCourses(
+          role,
           keySort,
           search,
           sort,
@@ -100,7 +102,7 @@ courseController
   )
   // Detail course
   .get(
-    "/detail-course/:id",
+    "/detail/:id",
     async (req: express.Request, res: express.Response) => {
       try {
         const courseId = Number(req.params.id);

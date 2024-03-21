@@ -112,10 +112,17 @@ export class RegisterCourseRepository {
     }
   }
 
-  async getByUser(userId:number){
+  async getByUser(userId: number) {
     return await RegisteredCourse.findAll({
       include: [{ model: User }, { model: Course }],
-      where:{userId}
-    })
+      where: { userId },
+    });
+  }
+
+  async finishLesson(userId: number, courseId: number) {
+    await RegisteredCourse.update(
+      { completedLessons: sequelize.literal("completedLessons + 1") },
+      { where: { [Op.and]: { userId, courseId } } }
+    );
   }
 }

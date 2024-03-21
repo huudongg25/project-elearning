@@ -9,10 +9,12 @@ const registerCourseService = new RegisterCourseService();
 const msg = new MessageCodeResponse();
 registerCourseController
   // Create
-  .post("/create", Authorization,async (req: express.Request, res: express.Response) => {
+  .post("/create", Authorization,async (req: express.Request | any, res: express.Response) => {
     try {
       const form = req.body;
-      await registerCourseService.create(form);
+      const user = req.user
+      const email = user.email
+      await registerCourseService.create(form,email);
       res
         .status(StatusCode.CREATED)
         .json({ msg: msg.CREATED("REGISTER COURSE") });
@@ -76,5 +78,16 @@ registerCourseController
       res
       .status(StatusCode.INTERNAL_SERVER_ERROR)
       .json({ msg: msg.INTERNAL_SERVER_ERROR("GET REGISTER COURSE BY USER") });
+    }
+  })
+  // Hoàn thành bài học
+  .patch("/finished-lessons", Authorization, async (req:express.Request, res:express.Response) => {
+    try {
+      const userId = Number(req.body.userId);
+      const courseId = Number(req.body.courseId);
+      await registerCourseService.finishLesson(userId,courseId)
+      res.status(StatusCode.OK).json({ msg: msg.UPDATE("REGISTER")})
+    } catch (error) {
+      res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ msg: msg.INTERNAL_SERVER_ERROR("FINISH LESSON")})
     }
   })

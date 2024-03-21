@@ -12,7 +12,7 @@ const msg = new MessageCodeResponse();
 lessonController
   // Create lesson
   .post(
-    "/create-lesson",Authorization,checkRole,
+    "/create",Authorization,checkRole,
     async (req: express.Request, res: express.Response) => {
       try {
         const formLesson: ILesson = req.body;
@@ -29,7 +29,7 @@ lessonController
   )
   // Delete lesson
   .delete(
-    "/delete-lesson/:id",Authorization,checkRole,
+    "/delete/:id",Authorization,checkRole,
     async (req: express.Request, res: express.Response) => {
       try {
         const lessonId = Number(req.params.id);
@@ -44,7 +44,7 @@ lessonController
   )
   // Update lesson
   .patch(
-    "/update-lesson/:id",Authorization,
+    "/update/:id",Authorization,
     async (req: express.Request, res: express.Response) => {
       try {
         const lessonId = Number(req.params.id);

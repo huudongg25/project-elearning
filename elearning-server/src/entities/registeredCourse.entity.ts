@@ -24,7 +24,16 @@ export const RegisteredCourse = sequelize.define('registeredCourses',{
     codePayment: {
         type: DataTypes.STRING,
         allowNull: false
-    }
+    },
+    totalLessons: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    completedLessons: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: 0
+    },
 },{timestamps: true})
 
 RegisteredCourse.belongsTo(User,{foreignKey: "userId", onDelete: "CASCADE", onUpdate:"CASCADE"})

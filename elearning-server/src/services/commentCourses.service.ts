@@ -19,7 +19,8 @@ export class CommentCourseService {
     await this._commentCourseRepository.delete(commentId);
   }
 
-  async getAll(key:string): Promise<any> {
-    return await this._commentCourseRepository.getAll(key);
+  async getAll(key:string,page:number,limit:number,courseId:number|undefined): Promise<any> {
+    const offset = Math.ceil((page - 1) * limit)
+    return await this._commentCourseRepository.getAll(key,offset,limit,courseId);
   }
 }

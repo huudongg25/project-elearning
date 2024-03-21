@@ -17,7 +17,6 @@ export class RateRepository {
 
   async getAll(key:string): Promise<any> {
     if (key === "admin") {
-      
       return await RatingCourse.findAll({
         include: [{ model: User }, { model: Course }],
       });

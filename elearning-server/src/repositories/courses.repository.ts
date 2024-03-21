@@ -18,47 +18,62 @@ export class CourseRepository {
   }
 
   async getAllCourses(
+    role: string,
     keySort: string,
     offset: number,
     limit: number,
     search: string,
     sort: string
   ): Promise<any> {
-    if (search === "undefined" && sort === "undefined") {
-      return await Course.findAll({
-        offset: offset,
-        limit: limit,
-      });
-    }
-    if (search !== "undefined" && sort === "undefined") {
-      return await Course.findAll({
-        offset: offset,
-        limit: limit,
-        where: {
-          courseName: {
-            [Op.like]: `%${search}%`,
+    if (role === "user") {
+      if (search !== "undefined") {
+        return await Course.findAll({
+          where: {
+            courseName: {
+              [Op.like]: `%${search}%`,
+            },
           },
-        },
-      });
-    }
-    if (search === "undefined" && sort !== "undefined") {
-      return await Course.findAll({
-        offset: offset,
-        limit: limit,
-        order: [[keySort, sort]],
-      });
-    }
-    if (search !== "undefined" && sort !== "undefined") {
-      return await Course.findAll({
-        offset: offset,
-        limit: limit,
-        where: {
-          courseName: {
-            [Op.like]: `%${search}%`,
+        });
+      } else if (search === "undefined") {
+        return await Course.findAll();
+      }
+    } else if (role === "admin") {
+      if (search === "undefined" && sort === "undefined") {
+        return await Course.findAll({
+          offset: offset,
+          limit: limit,
+        });
+      }
+      if (search !== "undefined" && sort === "undefined") {
+        return await Course.findAll({
+          offset: offset,
+          limit: limit,
+          where: {
+            courseName: {
+              [Op.like]: `%${search}%`,
+            },
           },
-        },
-        order: [[keySort, sort]],
-      });
+        });
+      }
+      if (search === "undefined" && sort !== "undefined") {
+        return await Course.findAll({
+          offset: offset,
+          limit: limit,
+          order: [[keySort, sort]],
+        });
+      }
+      if (search !== "undefined" && sort !== "undefined") {
+        return await Course.findAll({
+          offset: offset,
+          limit: limit,
+          where: {
+            courseName: {
+              [Op.like]: `%${search}%`,
+            },
+          },
+          order: [[keySort, sort]],
+        });
+      }
     }
   }
 
@@ -67,8 +82,8 @@ export class CourseRepository {
       include: [
         { model: Lesson },
         { model: Category },
-        { model: RatingCourse },
-        { model: CommentCourse },
+        { model: RatingCourse, where: { isActive: 1 } },
+        // { model: CommentCourse, where: { isActive: 1 } },
       ],
       where: {
         id: id,
