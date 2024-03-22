@@ -3,13 +3,17 @@ import { CourseService } from "../services/courses.service";
 import { uploadImage } from "../configs/multerCloudinary.config";
 import { StatusCode } from "../common/variableResponse.common";
 import { MessageCodeResponse } from "../common/messageResponse.common";
+import { Authorization } from "../middlewares/auth.middleware";
+import { checkRole } from "../middlewares/checkRole.middleware";
 export const courseController = express.Router();
 const courseService = new CourseService();
 const msg = new MessageCodeResponse();
 courseController
   // Create Course
   .post(
-    "/create-course",
+    "/create",
+    Authorization,
+    checkRole,
     uploadImage.single("image"),
     async (req: express.Request, res: express.Response) => {
       try {
@@ -24,7 +28,7 @@ courseController
         res.status(StatusCode.CREATED).json({ msg: msg.CREATED("COURSE") });
       } catch (error) {
         console.log(error);
-        
+
         res
           .status(StatusCode.INTERNAL_SERVER_ERROR)
           .json({ msg: msg.INTERNAL_SERVER_ERROR("COURSE") });
@@ -33,7 +37,9 @@ courseController
   )
   // Delete Course
   .delete(
-    "/delete-course/:id",
+    "/delete/:id",
+    Authorization,
+    checkRole,
     async (req: express.Request, res: express.Response) => {
       try {
         const id = Number(req.params.id);
@@ -48,7 +54,8 @@ courseController
   )
   // Update Course
   .patch(
-    "/update-course/:id",
+    "/update/:id",
+    Authorization,
     uploadImage.single("image"),
     async (req: express.Request, res: express.Response) => {
       try {
@@ -66,7 +73,7 @@ courseController
   )
   //   Get Courses (search, sort, page)
   .get(
-    "/getall-courses",
+    "/get-all",
     async (req: express.Request, res: express.Response) => {
       try {
         const search = String(req.query.search) || "";
@@ -74,14 +81,18 @@ courseController
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 5;
         const keySort = String(req.query.key);
+        const role = String(req.query.role);
         const result = await courseService.getAllCourses(
+          role,
           keySort,
           search,
           sort,
           page,
           limit
         );
-        res.status(StatusCode.OK).json({ msg: msg.GET("COURSES"), data: result });
+        res
+          .status(StatusCode.OK)
+          .json({ msg: msg.GET("COURSES"), data: result });
       } catch (error) {
         res
           .status(StatusCode.INTERNAL_SERVER_ERROR)
@@ -91,7 +102,7 @@ courseController
   )
   // Detail course
   .get(
-    "/detail-course/:id",
+    "/detail/:id",
     async (req: express.Request, res: express.Response) => {
       try {
         const courseId = Number(req.params.id);

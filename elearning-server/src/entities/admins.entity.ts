@@ -7,7 +7,7 @@ export const Admin = sequelize.define('admins',{
         primaryKey: true,
         autoIncrement: true
     },
-    email: {
+    username: {
         type: DataTypes.STRING,
         allowNull: false
     },

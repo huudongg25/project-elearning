@@ -3,6 +3,8 @@ import { LessonService } from "../services/lessons.service";
 import { ILesson } from "../types";
 import { MessageCodeResponse } from "../common/messageResponse.common";
 import { StatusCode } from "../common/variableResponse.common";
+import { Authorization } from "../middlewares/auth.middleware";
+import { checkRole } from "../middlewares/checkRole.middleware";
 
 export const lessonController = express.Router();
 const lessonService = new LessonService();
@@ -10,7 +12,7 @@ const msg = new MessageCodeResponse();
 lessonController
   // Create lesson
   .post(
-    "/create-lesson",
+    "/create",Authorization,checkRole,
     async (req: express.Request, res: express.Response) => {
       try {
         const formLesson: ILesson = req.body;
@@ -27,7 +29,7 @@ lessonController
   )
   // Delete lesson
   .delete(
-    "/delete-lesson/:id",
+    "/delete/:id",Authorization,checkRole,
     async (req: express.Request, res: express.Response) => {
       try {
         const lessonId = Number(req.params.id);
@@ -42,7 +44,7 @@ lessonController
   )
   // Update lesson
   .patch(
-    "/update-lesson/:id",
+    "/update/:id",Authorization,
     async (req: express.Request, res: express.Response) => {
       try {
         const lessonId = Number(req.params.id);

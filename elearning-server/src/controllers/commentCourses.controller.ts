@@ -3,13 +3,14 @@ import { CommentCourseService } from "../services/commentCourses.service";
 import { IComment } from "../types";
 import { MessageCodeResponse } from "../common/messageResponse.common";
 import { StatusCode } from "../common/variableResponse.common";
+import { Authorization } from "../middlewares/auth.middleware";
 
 export const commentCourseController = express.Router();
 const commentCourseService = new CommentCourseService();
 const msg = new MessageCodeResponse();
 commentCourseController
   // Create comment
-  .post("/create", async (req: express.Request, res: express.Response) => {
+  .post("/create", Authorization,async (req: express.Request, res: express.Response) => {
     try {
       const form: IComment = req.body;
       await commentCourseService.create(form);
@@ -23,7 +24,7 @@ commentCourseController
     }
   })
   // isActive
-  .patch("/active/:id", async (req: express.Request, res: express.Response) => {
+  .patch("/active/:id", Authorization,async (req: express.Request, res: express.Response) => {
     try {
       const commentId = Number(req.params.id);
       await commentCourseService.active(commentId);
@@ -36,7 +37,7 @@ commentCourseController
   })
   // Delete comment
   .delete(
-    "/delete/:id",
+    "/delete/:id",Authorization,
     async (req: express.Request, res: express.Response) => {
       try {
         const commentId = Number(req.params.id);
@@ -52,13 +53,17 @@ commentCourseController
   // Get all comments
   .get("/get-all", async (req: express.Request, res: express.Response) => {
     try {
-      const result = await commentCourseService.getAll();
+      const key = String(req.query.key)
+      const page = Number(req.query.page) || 1
+      const limit = Number(req.query.limit) || 3
+      const courseId = Number(req.query.courseId) || undefined
+      const result = await commentCourseService.getAll(key,page,limit,courseId);
       res
         .status(StatusCode.OK)
-        .json({ msg: msg.GET("GET ALL COMMENTS COURSE"), data: result });
+        .json({ msg: msg.GET("ALL COMMENTS COURSE"), data: result });
     } catch (error) {
       res
         .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ msg: msg.INTERNAL_SERVER_ERROR("GET ALL COMMENTS COURSE") });
     }
-  });
+  })

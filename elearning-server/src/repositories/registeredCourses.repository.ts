@@ -1,6 +1,8 @@
 import { Op } from "sequelize";
 import { RegisteredCourse } from "../entities/registeredCourse.entity";
 import sequelize from "../configs/db.config";
+import { Course } from "../entities/courses.entity";
+import { User } from "../entities/users.entity";
 
 export class RegisterCourseRepository {
   async create(form: any): Promise<void> {
@@ -16,33 +18,61 @@ export class RegisterCourseRepository {
   ): Promise<any> {
     if (search === "undefined" && sort === "undefined") {
       return await RegisteredCourse.findAll({
+        include: [{ model: User }, { model: Course }],
         offset: offset,
         limit: limit,
       });
     }
     if (search !== "undefined" && sort === "undefined") {
       return await RegisteredCourse.findAll({
+        include: [
+          {
+            model: User,
+            where: {
+              [Op.or]: {
+                firstName: {
+                  [Op.like]: `%${search}%`,
+                },
+                lastName: {
+                  [Op.like]: `%${search}%`,
+                },
+              },
+            },
+          },
+          { model: Course },
+        ],
         offset: offset,
         limit: limit,
-        where: {
-          createdAt: {
-            [Op.like]: `%${search}%`,
-          },
-        },
       });
     }
     if (search === "undefined" && sort !== "undefined") {
       return await RegisteredCourse.findAll({
+        include: [{ model: User }, { model: Course }],
+        offset: offset,
+        limit: limit,
         order: [[keySort, sort]],
       });
     }
     if (search !== "undefined" && sort !== "undefined") {
       return await RegisteredCourse.findAll({
-        where: {
-          courseName: {
-            [Op.like]: `%${search}%`,
+        include: [
+          {
+            model: User,
+            where: {
+              [Op.or]: {
+                firstName: {
+                  [Op.like]: `%${search}%`,
+                },
+                lastName: {
+                  [Op.like]: `%${search}%`,
+                },
+              },
+            },
           },
-        },
+          { model: Course },
+        ],
+        offset: offset,
+        limit: limit,
         order: [[keySort, sort]],
       });
     }
@@ -80,5 +110,19 @@ export class RegisterCourseRepository {
         );
       }
     }
+  }
+
+  async getByUser(userId: number) {
+    return await RegisteredCourse.findAll({
+      include: [{ model: User }, { model: Course }],
+      where: { userId },
+    });
+  }
+
+  async finishLesson(userId: number, courseId: number) {
+    await RegisteredCourse.update(
+      { completedLessons: sequelize.literal("completedLessons + 1") },
+      { where: { [Op.and]: { userId, courseId } } }
+    );
   }
 }

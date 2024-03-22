@@ -2,16 +2,19 @@ import express from "express";
 import { RegisterCourseService } from "../services/registeredCourses.service";
 import { StatusCode } from "../common/variableResponse.common";
 import { MessageCodeResponse } from "../common/messageResponse.common";
+import { Authorization } from "../middlewares/auth.middleware";
 
 export const registerCourseController = express.Router();
 const registerCourseService = new RegisterCourseService();
 const msg = new MessageCodeResponse();
 registerCourseController
   // Create
-  .post("/create", async (req: express.Request, res: express.Response) => {
+  .post("/create", Authorization,async (req: express.Request | any, res: express.Response) => {
     try {
       const form = req.body;
-      await registerCourseService.create(form);
+      const user = req.user
+      const email = user.email
+      await registerCourseService.create(form,email);
       res
         .status(StatusCode.CREATED)
         .json({ msg: msg.CREATED("REGISTER COURSE") });
@@ -40,6 +43,8 @@ registerCourseController
         .status(StatusCode.OK)
         .json({ msg: msg.GET("REGISTERS COURSE"), data: result });
     } catch (error) {
+      console.log(error);
+      
       res
         .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ msg: msg.INTERNAL_SERVER_ERROR("GET ALL REGISTER COURSE") });
@@ -60,4 +65,29 @@ registerCourseController
         .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ msg: msg.INTERNAL_SERVER_ERROR("REVENUE") });
     }
-  });
+  })
+  // Get by user
+  .get('/get/:id', async (req: express.Request, res:express.Response) => {
+    try {
+      const id = Number(req.params.id);
+      const result = await registerCourseService.getByUser(id);
+      res
+      .status(StatusCode.OK)
+      .json({ msg: msg.GET("REGISTER COURSE BY USER"), data: result });
+    } catch (error) {
+      res
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json({ msg: msg.INTERNAL_SERVER_ERROR("GET REGISTER COURSE BY USER") });
+    }
+  })
+  // Hoàn thành bài học
+  .patch("/finished-lessons", Authorization, async (req:express.Request, res:express.Response) => {
+    try {
+      const userId = Number(req.body.userId);
+      const courseId = Number(req.body.courseId);
+      await registerCourseService.finishLesson(userId,courseId)
+      res.status(StatusCode.OK).json({ msg: msg.UPDATE("REGISTER")})
+    } catch (error) {
+      res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ msg: msg.INTERNAL_SERVER_ERROR("FINISH LESSON")})
+    }
+  })

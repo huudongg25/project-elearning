@@ -13,7 +13,7 @@ const checkEmailRegister = async (
     const email = req.body.email;
     const result = await userRepository.getUserEmail(email);
     if (result) {
-      res.status(StatusCode.NOT_FOUND).json({ msg: msg.NOT_FOUND("EMAIL") });
+      res.status(StatusCode.NOT_FOUND).json({ msg: msg.IS_EXISTING("EMAIL") });
     } else {
       next();
     }

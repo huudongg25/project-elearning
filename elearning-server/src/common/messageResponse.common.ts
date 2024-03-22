@@ -26,4 +26,10 @@ export class MessageCodeResponse {
     UNAUTHORIZED():string{
         return MessageCode.UNAUTHORIZED
     }
+    FORBIDDEN():string{
+        return MessageCode.FORBIDDEN
+    }
+    IS_EXISTING(value:string):string{
+        return value + " " + MessageCode.IS_EXIST
+    }
 }

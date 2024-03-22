@@ -30,7 +30,7 @@ authController
     try {
       const { email, password } = req.body;
       const user = await authService.login(email, password);
-      res.status(StatusCode.CREATED).json(user);
+      res.status(StatusCode.CREATED).json({ msg: "LOGIN SUCCESS", user });
     } catch (error: any) {
       if (error.status === 404) {
         res.status(error.status).json(error);

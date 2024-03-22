@@ -39,6 +39,7 @@ export class CourseService {
   }
 
   async getAllCourses(
+    role:string,
     keySort: string,
     search: string,
     sort: string,
@@ -47,6 +48,7 @@ export class CourseService {
   ): Promise<any> {
     const offset = Math.ceil((page - 1) * limit);
     return await this._courseRepository.getAllCourses(
+      role,
       keySort,
       offset,
       limit,

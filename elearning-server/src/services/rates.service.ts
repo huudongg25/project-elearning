@@ -19,7 +19,7 @@ export class RateService {
     await this._rateRepository.delete(rateId);
   }
 
-  async getAll(): Promise<any> {
-    return await this._rateRepository.getAll();
+  async getAll(key:string): Promise<any> {
+    return await this._rateRepository.getAll(key);
   }
 }
