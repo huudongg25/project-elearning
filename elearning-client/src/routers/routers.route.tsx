@@ -7,6 +7,7 @@ import Learning from "../components/course/courseLearning/learning";
 import Profile from "../components/profile/profile";
 import MyCourses from "../components/myCourses/myCourses";
 import CoursePage from "../components/course/coursePage/course";
+import Login from "../components/login/loginPage/login";
 
 const Routers = (): JSX.Element => {
   return (
@@ -29,6 +30,7 @@ const Routers = (): JSX.Element => {
           path="/myCourses"
           element={<DefaultLayout child={<MyCourses />} />}
         />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </>
   );
