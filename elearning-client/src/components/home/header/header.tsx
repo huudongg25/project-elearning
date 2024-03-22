@@ -9,8 +9,8 @@ const Header = () => {
         <div className="header_logo">
           <Link to={"/"}>
             <img
-              src="https://firebasestorage.googleapis.com/v0/b/project-shop-gundam.appspot.com/o/newProject%2Flogo%2Ff8-icon.18cd71cfcfa33566a22b.png?alt=media&token=7f889615-ae00-4f44-a7b3-679200082943"
-              alt="F8 logo"
+              src="https://firebasestorage.googleapis.com/v0/b/project-shop-gundam.appspot.com/o/newProject%2Fz5273279306118_0eb35430aec0b692f52db2650bd90933.jpg?alt=media&token=ce4fb59b-2b53-4cf9-bc37-2787c86a2eab"
+              alt="phoenix logo"
             />
           </Link>
           <h4>Học lập trình để đi làm</h4>
