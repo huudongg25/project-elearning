@@ -1,33 +1,51 @@
 .info_box {
-    background-color: white;
+    background-color: transparent;
     width: 370px;
     height: 520px;
     border-radius: 20px;
     padding: 30px;
     overflow-y: hidden;
+    color: white;
+    border: 2px solid #565656;
 }
 
-.register_body h2 {
-    color: #FF8A37;
+.register_body {
+    text-align: center;
 }
 
 .register_form {
     padding: 10px;
+
 }
 
 .register_input {
     width: 450px;
     height: 60px;
     overflow-y: hidden;
+
 }
 
 .register_input input {
     height: 40px;
 }
 
+.register_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register_button button {
+    border-radius: 20px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .register_button button:hover {
     background-color: white;
-    color: #FF8A37;
+    color: black;
 }
 
 /* register */
@@ -38,15 +56,15 @@
     border-radius: 20px;
     padding: 30px;
     overflow-y: hidden;
+    color: white;
 }
 
-
-.login_body h2 {
-    color: #FF8A37;
+.login_body {
+    text-align: center;
 }
 
 .login_form {
-    padding: 10px;
+    padding: 20px 10px;
 }
 
 .login_input {
@@ -64,7 +82,6 @@
     color: #FF8A37;
 }
 
-/* login */
 .login_navigator {
     display: flex;
     align-items: center;
@@ -83,6 +100,23 @@
     cursor: pointer;
     border-bottom: 2px solid transparent;
 }
+
+
+.login_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_button button {
+    border-radius: 20px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 
 .facebook {
     background-color: rgb(0, 98, 255);

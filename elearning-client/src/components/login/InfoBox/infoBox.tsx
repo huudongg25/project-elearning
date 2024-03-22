@@ -17,7 +17,7 @@ const formItemLayout = {
 };
 
 const RegisterBox = () => {
-  const [showLoginBox, setShowLoginBox] = useState(false);
+  const [showLoginBox, setShowLoginBox] = useState(true);
 
   const handleRegisterClick = () => {
     setShowLoginBox(false);
@@ -31,7 +31,8 @@ const RegisterBox = () => {
     <div className="info_box">
       {showLoginBox ? (
         <div className="login_body">
-          <h2> Lập trình dễ dàng bắt đầu từ số 0 </h2>
+          <h2> Lập trình dễ dàng bắt đầu từ số 0. </h2>
+
           <div className="login_form">
             <Form
               {...formItemLayout}
@@ -56,32 +57,41 @@ const RegisterBox = () => {
               </Form.Item>
               <Form.Item wrapperCol={{ span: 36 }} className="login_button">
                 <Button
-                  type="primary"
                   htmlType="submit"
-                  style={{ width: 100, height: 38, backgroundColor: "#FF8A37" }}
+                  style={{
+                    width: 200,
+                    height: 38,
+                    backgroundColor: "#FE5F59",
+                    color: "white",
+                    textAlign: "center",
+                  }}
                 >
                   Đăng Nhập
                 </Button>
                 <Button
-                  type="primary"
-                  style={{ width: 140, height: 38, marginLeft: 20 }}
+                  style={{
+                    width: 200,
+                    height: 38,
+                    backgroundColor: "transparent",
+                    marginTop: 20,
+                  }}
                   onClick={handleRegisterClick}
                 >
-                  Đăng ký
+                  Bạn chưa có tài khoản ?
                 </Button>
               </Form.Item>
             </Form>
           </div>
-          <div className="login_navigator">
+          {/* <div className="login_navigator">
             <TiSocialYoutube className="login_navigator_icon youtube" />
             <BiLogoFacebookSquare className="login_navigator_icon facebook" />
             <FaInstagram className="login_navigator_icon instagram" />
             <FaGithub className="login_navigator_icon github" />
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="register_body">
-          <h2> Đăng kí ngay để nhận các khóa học miễn phí</h2>
+          <h2> Đăng kí ngay để nhận các khóa học miễn phí.</h2>
           <div className="register_form">
             <Form
               {...formItemLayout}
@@ -124,18 +134,25 @@ const RegisterBox = () => {
               </Form.Item>
               <Form.Item wrapperCol={{ span: 36 }} className="register_button">
                 <Button
-                  type="primary"
                   htmlType="submit"
-                  style={{ width: 100, height: 38, backgroundColor: "#FF8A37" }}
+                  style={{
+                    width: 200,
+                    height: 38,
+                    backgroundColor: "#FE5F59",
+                    color: "white",
+                  }}
                 >
                   Đăng Kí
                 </Button>
                 <Button
-                  type="primary"
-                  style={{ width: 140, height: 38, marginLeft: 20 }}
+                  style={{
+                    width: 200,
+                    height: 38,
+                    backgroundColor: "transparent",
+                  }}
                   onClick={handleLoginClick}
                 >
-                  Đã có tài khoản ?
+                  Bạn đã có tài khoản ?
                 </Button>
               </Form.Item>
             </Form>

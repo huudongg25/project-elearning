@@ -3,36 +3,36 @@ import { Carousel } from "antd";
 import "./loginBanner.css";
 
 const contentStyle: React.CSSProperties = {
-  height: "450px",
+  height: "350px",
   color: "#fff",
   lineHeight: "160px",
   textAlign: "center",
-  width: "750px",
+  width: "650px",
 };
 
 const LoginBanner: React.FC = () => (
   <Carousel autoplay className="carousel">
     <div className="banner_login">
       <img
-        src="https://www.commonsense.org/sites/default/files/png/2020-12/teachers-essential-guide-to-coding-in-the-classroom-article.png"
+        src="https://longvan.net/hinhanh/tintuc/css-la-gi1.jpg"
         style={contentStyle}
       />
     </div>
     <div className="banner_login">
       <img
-        src="https://genk.mediacdn.vn/thumb_w/640/2015/img-0359-1451277991189.jpg"
+        src="https://statics.cdn.200lab.io/2023/09/02-Tempalte--5-.png"
         style={contentStyle}
       />
     </div>
     <div className="banner_login">
       <img
-        src="https://khpt.1cdn.vn/2024/01/16/089a7916.jpg"
+        src="https://static-xf1.vietnix.vn/wp-content/uploads/2024/01/javascript-la-gi.webp"
         style={contentStyle}
       />
     </div>
     <div className="banner_login">
       <img
-        src="https://toidicodedao.files.wordpress.com/2017/03/117software-developer.jpg?w=672&h=300&crop=1"
+        src="https://lptech.asia/uploads/files/2022/05/09/Lo-trinh-hoc-lap-trinh-web-cho-front-end-2.png"
         style={contentStyle}
       />
     </div>
