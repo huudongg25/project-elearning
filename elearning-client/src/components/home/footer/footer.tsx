@@ -30,7 +30,7 @@ const Footer = () => {
         </div>
         <div className="footer_column">
           <div className="footer_column_head">
-            <p>VỀ F8</p>
+            <p>VỀ Phoenix</p>
           </div>
           <div className="footer_column_body">
             <nav>Giới thiệu</nav>

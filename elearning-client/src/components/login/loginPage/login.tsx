@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./login.css";
 import RegisterBox from "../InfoBox/infoBox";
 import LoginBanner from "../loginBanner/loginBanner";

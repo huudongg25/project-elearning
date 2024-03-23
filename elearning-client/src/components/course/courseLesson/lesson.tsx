@@ -1,6 +1,6 @@
 import React from "react";
 import "./lesson.css";
-const Lesson = () => {
+const CourseLesson = () => {
   return (
     <div className="lesson_container">
       <iframe
@@ -20,4 +20,4 @@ const Lesson = () => {
   );
 };
 
-export default Lesson;
+export default CourseLesson;

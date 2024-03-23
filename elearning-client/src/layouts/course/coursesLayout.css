@@ -37,6 +37,8 @@ ol {
     background-color: #29303B;
     height: 60px;
     padding: 10px;
+    box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.05);
+
 }
 
 .course_child {
@@ -52,6 +54,8 @@ ol {
     width: 300px;
     top: 60px;
     right: 0;
+    box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.05);
+
 }
 
 .footer_course_layout {

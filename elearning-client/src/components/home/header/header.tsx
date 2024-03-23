@@ -24,8 +24,10 @@ const Header = () => {
           />
         </div>
         <div className="header_button">
-          <button className="header_button_login">Đăng nhập</button>
-          <button className="header_button_register">Đăng ký</button>
+          {/* <button className="header_button_login">Đăng nhập</button> */}
+          <Link to={"/login"}>
+            <button className="header_button_register">Đăng ký</button>
+          </Link>
         </div>
       </section>
     </header>

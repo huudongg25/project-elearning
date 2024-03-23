@@ -17,7 +17,7 @@ const formItemLayout = {
 };
 
 const RegisterBox = () => {
-  const [showLoginBox, setShowLoginBox] = useState(true);
+  const [showLoginBox, setShowLoginBox] = useState(false);
 
   const handleRegisterClick = () => {
     setShowLoginBox(false);
