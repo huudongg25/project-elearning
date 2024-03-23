@@ -34,6 +34,8 @@ ol {
     width: 96px;
     top: 66px;
     left: 0;
+    height: 100vh;
+
 }
 
 .child {
@@ -42,6 +44,8 @@ ol {
     min-height: 100vh;
     margin-top: 66px;
     margin-left: 96px;
+    box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.05);
+
 }
 
 .footer_default_layout {
@@ -51,4 +55,5 @@ ol {
     color: #a9b3bb;
     overflow: hidden;
     padding: 40px 0 40px;
+    z-index: 10;
 }
