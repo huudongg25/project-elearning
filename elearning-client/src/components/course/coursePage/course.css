@@ -8,3 +8,26 @@
     font-weight: 700;
     padding: 30px 0px;
 }
+
+.course_box {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.course_box_content img {
+    border-radius: 10px;
+    width: 350px;
+    height: 200px;
+}
+
+.course_box_title {
+    font-weight: 600;
+    color: black;
+}
+
+.course_box_price {
+    font-size: 20px;
+    font-weight: 600;
+    color: #F05123;
+}

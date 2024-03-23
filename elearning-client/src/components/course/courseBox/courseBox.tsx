@@ -16,6 +16,7 @@ const CourseBox = () => {
       <Link to={"learning/1"}>
         <p className="course_box_title">Kiến thức nhập môn IT</p>
       </Link>
+      <p className="course_box_price">Miễn phí</p>
     </div>
   );
 };

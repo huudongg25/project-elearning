@@ -7,7 +7,7 @@ import Profile from "../components/profile/profile";
 import MyCourses from "../components/myCourses/myCourses";
 import CoursePage from "../components/course/coursePage/course";
 import Login from "../components/login/loginPage/login";
-import CourseDetail from "../components/course/courseDetail/courseDetail";
+import CourseDetail from "../components/courseDetail/courseDetail";
 import CourseLesson from "../components/course/courseLesson/lesson";
 
 const Routers = (): JSX.Element => {

@@ -1,11 +1,11 @@
 import React from "react";
 import "./courseDetail.css";
-import CourseBox from "../courseBox/courseBox";
 import { MdOutlineSpeed } from "react-icons/md";
 import { FaFilm } from "react-icons/fa";
 import { FaClock } from "react-icons/fa";
 import { FaBatteryFull } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
+import CourseBox from "../course/courseBox/courseBox";
 const CourseDetail = () => {
   return (
     <div className="course_detail_container">
