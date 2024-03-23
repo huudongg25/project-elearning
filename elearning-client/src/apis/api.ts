@@ -45,6 +45,5 @@ class Api {
   async CreateOtp(endpoint: string, email: any) {
     return await PrivateAxios.post(endpoint, { email });
   }
-  
 }
 export default Api;
