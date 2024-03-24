@@ -3,6 +3,7 @@ import { RegisteredCourse } from "../entities/registeredCourse.entity";
 import sequelize from "../configs/db.config";
 import { Course } from "../entities/courses.entity";
 import { User } from "../entities/users.entity";
+import { LessonUser } from "../entities/lessonsUser.entity";
 
 export class RegisterCourseRepository {
   async create(form: any): Promise<void> {
@@ -114,7 +115,7 @@ export class RegisterCourseRepository {
 
   async getByUser(userId: number) {
     return await RegisteredCourse.findAll({
-      include: [{ model: User }, { model: Course }],
+      include: [{ model: User }, { model: Course }, { model: LessonUser }],
       where: { userId },
     });
   }
@@ -124,5 +125,16 @@ export class RegisterCourseRepository {
       { completedLessons: sequelize.literal("completedLessons + 1") },
       { where: { [Op.and]: { userId, courseId } } }
     );
+  }
+
+  async getRegisteredId(form: any) {
+    return await RegisteredCourse.findAll({
+      where: form,
+      include: [
+        { model: User },
+        { model: Course },
+        { model: LessonUser, attributes: { exclude: ["id"] } },
+      ],
+    });
   }
 }

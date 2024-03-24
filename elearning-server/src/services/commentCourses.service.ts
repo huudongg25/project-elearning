@@ -23,4 +23,8 @@ export class CommentCourseService {
     const offset = Math.ceil((page - 1) * limit)
     return await this._commentCourseRepository.getAll(key,offset,limit,courseId);
   }
+
+  async getCountComment(key:string,courseId:number){
+    return await this._commentCourseRepository.getCountComment(key,courseId)
+  }
 }

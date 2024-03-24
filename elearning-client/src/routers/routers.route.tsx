@@ -20,12 +20,17 @@ const Routers = (): JSX.Element => {
           element={<DefaultLayout child={<CoursePage />} />}
         />
         <Route
+<<<<<<< Updated upstream
           path="/courses/Learning/:id"
           element={<CoursesLayout child={<CourseLesson />} />}
         />
         <Route
           path="/courses/Detail/:id"
           element={<DefaultLayout child={<CourseDetail />} />}
+=======
+          path="/learning/:id"
+          element={<CoursesLayout child={<Learning />} />}
+>>>>>>> Stashed changes
         />
         <Route
           path="/profile/:id"

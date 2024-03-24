@@ -29,7 +29,7 @@ export class CommentCourseRepository {
           include: [{ model: User }, { model: Course }],
           where: {
             isActive: 1,
-            courseId
+            courseId,
           },
         });
       }
@@ -41,6 +41,22 @@ export class CommentCourseRepository {
           limit,
         });
       }
+    }
+  }
+  async getCountComment(key: string,courseId:number) {
+    if (key === "user") {
+      return await CommentCourse.count({
+        where: {
+          isActive: 1,
+          courseId
+        },
+      });
+    } else if(key === "admin"){
+      return await CommentCourse.count({
+        where: {
+          courseId
+        },
+      });
     }
   }
 }
