@@ -46,10 +46,6 @@ export const Course = sequelize.define('courses',{
         allowNull: false,
         defaultValue: 0
     },
-    publishedAt: {
-        type: DataTypes.DATEONLY,
-        allowNull: true
-    },
 },{timestamps:true})
 
 Course.belongsTo(Category,{foreignKey: "categoryId", onDelete: "CASCADE", onUpdate: "CASCADE"})

@@ -1,15 +1,12 @@
 import transporter from "../configs/nodemailer.config";
 import { RegisterCourseRepository } from "../repositories/registeredCourses.repository";
-import { UserRepository } from "../repositories/users.repository";
 import { IRegisterCourse } from "../types";
 import { v1 as uuidv1 } from "uuid";
 
 export class RegisterCourseService {
   private _registerCourseRepository: RegisterCourseRepository;
-  private _userRepository: UserRepository;
   constructor() {
     this._registerCourseRepository = new RegisterCourseRepository();
-    this._userRepository = new UserRepository();
   }
 
   async create(form: IRegisterCourse, email: string) {
@@ -69,5 +66,9 @@ export class RegisterCourseService {
 
   async finishLesson(userId: number,courseId: number) {
     await this._registerCourseRepository.finishLesson(userId, courseId);
+  }
+
+  async getRegisteredId(form:any){
+    return await this._registerCourseRepository.getRegisteredId(form);
   }
 }

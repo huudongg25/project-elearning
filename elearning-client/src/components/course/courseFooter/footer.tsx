@@ -1,6 +1,5 @@
 import React from "react";
 import "./footer.css";
-import { IoListOutline } from "react-icons/io5";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 const CourseFooter = () => {
   return (
@@ -17,12 +16,6 @@ const CourseFooter = () => {
           <span>
             <FaChevronRight />
           </span>
-        </button>
-      </div>
-      <div className="course_footer_session_title">
-        <p>tiêu đề của bài học</p>
-        <button className="course_footer_session_button">
-          <IoListOutline />
         </button>
       </div>
     </div>

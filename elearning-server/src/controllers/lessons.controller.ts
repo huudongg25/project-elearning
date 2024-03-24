@@ -12,7 +12,8 @@ const msg = new MessageCodeResponse();
 lessonController
   // Create lesson
   .post(
-    "/create",Authorization,checkRole,
+    "/create",
+    // Authorization,checkRole,
     async (req: express.Request, res: express.Response) => {
       try {
         const formLesson: ILesson = req.body;

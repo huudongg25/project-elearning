@@ -4,8 +4,7 @@ import "./header.css";
 import { Link } from "react-router-dom";
 const CourseHeader = () => {
   return (
-    <header className="course_header">
-      <section className="course_header_container">
+      <header className="course_header_container">
         <div className="course_header_info">
           <Link to={"/"} className="course_header_back">
             <FaChevronLeft />
@@ -20,7 +19,7 @@ const CourseHeader = () => {
         </div>
         <div className="course_header_progress">
           <div className="course_header_progress_percent">
-            <p>0%</p>
+            <p>100%</p>
           </div>
           <div className="course_header_progress_lesson">
             <p>
@@ -29,8 +28,7 @@ const CourseHeader = () => {
             </p>
           </div>
         </div>
-      </section>
-    </header>
+      </header>
   );
 };
 

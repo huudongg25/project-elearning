@@ -67,3 +67,14 @@ commentCourseController
         .json({ msg: msg.INTERNAL_SERVER_ERROR("GET ALL COMMENTS COURSE") });
     }
   })
+  // Get count of comments
+  .get('/count', async (req:express.Request,res:express.Response) => {
+    try {
+      const key = String(req.query.key)
+      const courseId = Number(req.query.courseId)
+      const result = await commentCourseService.getCountComment(key,courseId);
+      res.status(StatusCode.OK).json({msg:msg.GET("COUNT COMMENT"), count: result})
+    } catch (error) {
+      res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ msg: msg.INTERNAL_SERVER_ERROR("GET COUNT COMMENT")})
+    }
+  })

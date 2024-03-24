@@ -80,8 +80,20 @@ registerCourseController
       .json({ msg: msg.INTERNAL_SERVER_ERROR("GET REGISTER COURSE BY USER") });
     }
   })
+  // Get registeredId 
+  .get('/get-detail-registered', async (req:express.Request, res:express.Response) => {
+    try {
+      const form = req.query
+      const result = await registerCourseService.getRegisteredId(form);
+      res.status(StatusCode.OK).json({msg:msg.GET("REGISTERED DETAIL"), data:result})
+    } catch (error) {
+      res.status(StatusCode.INTERNAL_SERVER_ERROR).json({msg: msg.INTERNAL_SERVER_ERROR("GET REGISTERED DETAIL")})
+    }
+  })
   // Hoàn thành bài học
-  .patch("/finished-lessons", Authorization, async (req:express.Request, res:express.Response) => {
+  .patch("/finished-lessons", 
+  // Authorization,
+   async (req:express.Request, res:express.Response) => {
     try {
       const userId = Number(req.body.userId);
       const courseId = Number(req.body.courseId);
