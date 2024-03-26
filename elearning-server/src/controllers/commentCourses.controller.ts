@@ -10,7 +10,9 @@ const commentCourseService = new CommentCourseService();
 const msg = new MessageCodeResponse();
 commentCourseController
   // Create comment
-  .post("/create", Authorization,async (req: express.Request, res: express.Response) => {
+  .post("/create", 
+  // Authorization,
+  async (req: express.Request, res: express.Response) => {
     try {
       const form: IComment = req.body;
       await commentCourseService.create(form);

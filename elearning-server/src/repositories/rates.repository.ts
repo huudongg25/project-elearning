@@ -29,4 +29,12 @@ export class RateRepository {
       })
     }
   }
+  async getOneRate(form:any) {
+    return await RatingCourse.findOne({
+      where: {
+        userId: form.userId,
+        courseId: form.courseId,
+      }
+    });
+  }
 }

@@ -25,34 +25,6 @@ ol {
 }
 
 .header_course_layout {
-<<<<<<< Updated upstream
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: #29303B;
-    height: 60px;
-    padding: 10px;
-    box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.05);
-
-}
-
-.course_child {
-    overflow-y: scroll;
-    min-height: 100vh;
-    margin-top: 60px;
-    margin-right: 300px;
-    padding: 0;
-}
-
-.sidebar_course_layout {
-    position: fixed;
-    width: 300px;
-    top: 60px;
-    right: 0;
-    box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.05);
-
-=======
   position: fixed;
   top: 0;
   left: 0;
@@ -70,7 +42,6 @@ ol {
   background-color: #fff;
   border-left: 1px solid #e6e5e5;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
->>>>>>> Stashed changes
 }
 
 .course_child {

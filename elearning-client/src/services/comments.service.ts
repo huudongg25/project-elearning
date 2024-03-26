@@ -34,4 +34,13 @@ export class CommentService {
         
     }
   }
+
+  async createComment(userId:number, courseId:number, content:string) {
+    const form = {
+      userId,
+      courseId,
+      content
+    }
+    await this._commentRepository.createComment(form)
+  }
 }

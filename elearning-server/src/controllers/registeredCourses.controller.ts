@@ -97,7 +97,8 @@ registerCourseController
     try {
       const userId = Number(req.body.userId);
       const courseId = Number(req.body.courseId);
-      await registerCourseService.finishLesson(userId,courseId)
+      const completedLessons = Number(req.body.completedLessons);
+      await registerCourseService.finishLesson(userId,courseId,completedLessons)
       res.status(StatusCode.OK).json({ msg: msg.UPDATE("REGISTER")})
     } catch (error) {
       res.status(StatusCode.INTERNAL_SERVER_ERROR).json({ msg: msg.INTERNAL_SERVER_ERROR("FINISH LESSON")})

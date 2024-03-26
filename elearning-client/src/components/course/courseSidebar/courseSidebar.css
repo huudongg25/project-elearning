@@ -49,3 +49,6 @@
     width: 22px;
     height: 22px;
 }
+.flip {
+    transform: scaleX(-1);
+}

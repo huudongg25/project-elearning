@@ -13,4 +13,8 @@ export class CommentRepository {
     async getCountComment(form :any) {
         return this._api.Get("/comments/count",form)
     }
+
+    async createComment(form: any) {
+        return this._api.Post("/comments/create",form)
+    }
 }

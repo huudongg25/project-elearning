@@ -10,7 +10,9 @@ const rateService = new RateService();
 const msg = new MessageCodeResponse();
 rateController
   // Create Rate
-  .post("/create",Authorization, async (req: express.Request, res: express.Response) => {
+  .post("/create",
+  // Authorization,
+   async (req: express.Request, res: express.Response) => {
     try {
       const form: IRate = req.body;
       await rateService.create(form);
@@ -59,4 +61,16 @@ rateController
         .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ msg: msg.INTERNAL_SERVER_ERROR("GET RATES COURSE") });
     }
-  });
+  })
+  // Get one rate
+  .get("/get-one", async (req: express.Request, res:express.Response) => {
+    try {
+      const form = req.query;
+      const result = await rateService.getOneRate(form);
+      res.status(StatusCode.OK).json({ msg: msg.GET("RATE COURSE"), data: result });
+    } catch (error) {
+      res
+        .status(StatusCode.INTERNAL_SERVER_ERROR)
+        .json({ msg: msg.INTERNAL_SERVER_ERROR("GET RATE COURSE") });
+    }
+  })

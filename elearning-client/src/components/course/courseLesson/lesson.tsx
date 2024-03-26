@@ -1,41 +1,38 @@
-<<<<<<< Updated upstream:elearning-client/src/components/course/courseLesson/lesson.tsx
-import React from "react";
+import React, {
+  ChangeEvent,
+  FocusEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import "./lesson.css";
-const CourseLesson = () => {
-  return (
-    <div className="lesson_container">
-      <iframe
-        frameBorder="0"
-        allowFullScreen
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        title="1. Giới Thiệu khóa học C++"
-        width="100%"
-        height="500px"
-        src="https://www.youtube.com/embed/Da1tpV9TMU0?autoplay=1&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Ffullstack.edu.vn&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=5"
-        id="widget6"
-      ></iframe>
-      <div className="lesson_title">
-        <h2>Giới thiệu khóa học</h2>
-=======
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import "./learning.css";
 import ReactPlayer from "react-player";
 import { CourseService } from "../../../services/courses.service";
 import { useDispatch } from "react-redux";
 import { setLessons } from "../../../store/reducers/lessonsReducer";
 import { useSelector } from "react-redux";
-import { selectLessonId } from "../../../store/reducers/lessonIdReduce";
+import {
+  selectLessonId,
+  setLessonId,
+} from "../../../store/reducers/lessonIdReduce";
 import { RegisteredCourseService } from "../../../services/registeredCourses.service";
 import { LessonUserService } from "../../../services/lessonUsers.service";
-import { setLessonState } from "../../../store/reducers/lessonState";
 import { CommentService } from "../../../services/comments.service";
 import { useLocation } from "react-router-dom";
 import formatDate from "../../../common/formatDate.common";
+import { setDetailRegisteredCourse } from "../../../store/reducers/detailRegisteredCourse";
+import Rates from "../../rate/rate";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+import { ToastSuccess, ToastWarning } from "../../../common/toastify.common";
+import { RateService } from "../../../services/rates.service";
+import { setLessonState } from "../../../store/reducers/lessonState";
 
 const Learning = () => {
   const [data, setData] = useState([]);
+  const [isRate, setIsRate] = useState<boolean>(false);
   const [detailCourse, setDetailCourse] = useState<any>();
-  const [detailRegisteredCourse, setDetailRegisteredCourse] = useState<any>();
+  const [detailRegisteredCourse, setDetailRegisteredCourses] = useState<any>();
   const dispatch = useDispatch();
   const location = useLocation();
   const endpoint = location.pathname.split("/");
@@ -43,7 +40,7 @@ const Learning = () => {
   const courseService = new CourseService();
   const registeredCourseService = new RegisteredCourseService();
   const lessonUserService = new LessonUserService();
-
+  const rateService = new RateService();
   // Get
   const getDetailCourse = async () => {
     const result = await courseService.getDetailCourse(Number(courseId));
@@ -54,7 +51,14 @@ const Learning = () => {
       1,
       Number(courseId)
     );
-    setDetailRegisteredCourse(result);
+    setDetailRegisteredCourses(result);
+    dispatch(setDetailRegisteredCourse(result));
+    if (result.completedLessons === result.totalLessons){
+      const result = await rateService.getOneRate(1, Number(courseId));
+      if (!result) {
+        setIsRate(true);
+      }
+    }
   };
   useEffect(() => {
     getDetailCourse();
@@ -76,7 +80,6 @@ const Learning = () => {
     dispatch(setLessons(mergeArray));
     setData(mergeArray);
   }, [detailCourse?.lessons, detailRegisteredCourse?.LessonUsers]);
-
   const id = useSelector(selectLessonId);
   const lesson = detailCourse?.lessons.find((item: any) => item.id === id);
 
@@ -93,14 +96,44 @@ const Learning = () => {
         Number(detailCourse.lessons[0].id),
         Number(detailRegisteredCourse?.id)
       );
+      getDetailRegisteredCourseUser();
     }
   };
   const handleEndVideo = async () => {
-    await registeredCourseService.updateStateCourseUser(1, 1);
-    await lessonUserService.updateStateLessonUser(
-      lesson.id,
-      detailRegisteredCourse.id
-    );
+    if (id) {
+      await lessonUserService.updateStateLessonUser(
+        lesson.id,
+        detailRegisteredCourse.id
+      );
+      const newId = id + 1;
+      const newLesson = detailCourse?.lessons.find(
+        (item: any) => item.id === newId
+      );
+      if (newLesson) {
+        dispatch(setLessonId(newId));
+        dispatch(setLessonState(newLesson));
+      }
+    } else {
+      await lessonUserService.updateStateLessonUser(
+        Number(detailCourse?.lessons[0].id),
+        detailRegisteredCourse.id
+      );
+      const newId = Number(detailCourse?.lessons[0].id) + 1;
+      const newLesson = detailCourse?.lessons.find(
+        (item: any) => item.id === newId
+      );
+      dispatch(setLessonId(newId));
+      dispatch(setLessonState(newLesson));
+    }
+    getDetailRegisteredCourseUser();
+    if (
+      detailRegisteredCourse.completedLessons <
+      detailRegisteredCourse.totalLessons
+    ) {
+      const completedLessons = detailRegisteredCourse.completedLessons + 1
+      await registeredCourseService.updateStateCourseUser(1, Number(courseId),completedLessons);
+    }
+    getDetailRegisteredCourseUser();
   };
 
   // Comment
@@ -127,10 +160,37 @@ const Learning = () => {
     getComments();
     setIsLoadComment(false);
   };
-  console.log(countComments, comments.length);
 
+  const handleFocusComment = (e: FocusEvent<HTMLInputElement>) => {
+    const inputElement = e.target as HTMLInputElement;
+    inputElement.style.borderBottom = "1px solid #000";
+  };
+  const handleBlurComment = (e: FocusEvent<HTMLInputElement>) => {
+    const inputElement = e.target as HTMLInputElement;
+    inputElement.style.borderBottom = "1px solid #ddd";
+  };
+  // Create comment
+  const [createComment, setCreateComment] = useState<string>("");
+  const changeComment = (e: ChangeEvent<HTMLInputElement>) => {
+    setCreateComment(e.target.value);
+  };
+  const handleCreateComment = async () => {
+    if (createComment === "") {
+    } else {
+      await commentService.createComment(1, Number(courseId), createComment);
+      setCreateComment("");
+      // ToastWarning("Comment Success!");
+      alert("Comment Success!");
+      getComments();
+      getCountComments();
+    }
+  };
+  const offIsRate = () => {
+    setIsRate(false);
+  };
   return (
     <section id="learning">
+      <ToastContainer />
       <div className="learning_video">
         <ReactPlayer
           url={id ? lesson.videoURL : detailCourse?.lessons[0].videoURL}
@@ -139,18 +199,36 @@ const Learning = () => {
           controls
           onEnded={handleEndVideo}
           onStart={handlePlay}
+          playing={true}
         />
         <div className="learning_video_info">
           <h2>{id ? lesson.title : detailCourse?.lessons[0].title}</h2>
-          <p>{id ? formatDate(String(lesson.updatedAt)) : formatDate(String(detailCourse?.lessons[0]?.updatedAt))}</p>
+          <p>
+            Cập nhật:{" "}
+            {id
+              ? formatDate(String(lesson.updatedAt))
+              : formatDate(String(detailCourse?.lessons[0]?.updatedAt))}
+          </p>
         </div>
->>>>>>> Stashed changes:elearning-client/src/components/course/courseLearning/learning.tsx
       </div>
       <div className="learning_comments">
         <h3>{countComments} binh luan</h3>
         <div className="learning_comments_enters">
           <img src={detailRegisteredCourse?.user?.avatar} alt="" />
-          <input placeholder="Viet binh luan o day..." type="text" />
+          <input
+            value={createComment}
+            onChange={changeComment}
+            onBlur={handleBlurComment}
+            onFocus={handleFocusComment}
+            placeholder="Viet binh luan o day..."
+            type="text"
+          />
+          <button
+            onClick={handleCreateComment}
+            className="learning_comments_btn"
+          >
+            Bình luận
+          </button>
         </div>
         <ul className="learning_comments_contents">
           {comments.length > 0 &&
@@ -182,8 +260,11 @@ const Learning = () => {
           )}
         </div>
       )}
+      {isRate ? (
+        <Rates offIsRate={offIsRate} course={detailRegisteredCourse} />
+      ) : null}
     </section>
   );
 };
 
-export default CourseLesson;
+export default Learning;
