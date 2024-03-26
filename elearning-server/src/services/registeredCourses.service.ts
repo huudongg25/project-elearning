@@ -64,8 +64,8 @@ export class RegisterCourseService {
     return await this._registerCourseRepository.getByUser(id);
   }
 
-  async finishLesson(userId: number,courseId: number) {
-    await this._registerCourseRepository.finishLesson(userId, courseId);
+  async finishLesson(userId: number,courseId: number, completedLessons: number) {
+    await this._registerCourseRepository.finishLesson(userId, courseId,completedLessons);
   }
 
   async getRegisteredId(form:any){

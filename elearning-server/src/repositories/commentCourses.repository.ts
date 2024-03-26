@@ -31,6 +31,7 @@ export class CommentCourseRepository {
             isActive: 1,
             courseId,
           },
+          order: [["createdAt", "DESC"]],
         });
       }
     } else {
@@ -39,6 +40,7 @@ export class CommentCourseRepository {
           include: [{ model: User }, { model: Course }],
           offset,
           limit,
+          order: [["createdAt", "DESC"]],
         });
       }
     }

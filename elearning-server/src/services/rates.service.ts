@@ -22,4 +22,7 @@ export class RateService {
   async getAll(key:string): Promise<any> {
     return await this._rateRepository.getAll(key);
   }
+  async getOneRate(form: any) {
+    return await this._rateRepository.getOneRate(form);
+  }
 }

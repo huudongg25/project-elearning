@@ -19,11 +19,12 @@ export class RegisteredCourseService {
         }
     }
 
-    async updateStateCourseUser(userId:number, courseId:number) {
+    async updateStateCourseUser(userId:number, courseId:number,completedLessons:number) {
         try {
             const form = {
                 userId,
-                courseId
+                courseId,
+                completedLessons,
             }
             await this._registeredCourseRepository.updateStateCourseUser(form)
         } catch (error) {

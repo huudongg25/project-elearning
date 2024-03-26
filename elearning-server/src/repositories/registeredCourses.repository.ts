@@ -120,9 +120,13 @@ export class RegisterCourseRepository {
     });
   }
 
-  async finishLesson(userId: number, courseId: number) {
+  async finishLesson(
+    userId: number,
+    courseId: number,
+    completedLessons: number
+  ) {
     await RegisteredCourse.update(
-      { completedLessons: sequelize.literal("completedLessons + 1") },
+      { completedLessons },
       { where: { [Op.and]: { userId, courseId } } }
     );
   }

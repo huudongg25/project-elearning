@@ -23,6 +23,11 @@
     gap: 15px;
     margin-top: 10px;
 }
+.learning_comments .learning_comments_enters button {
+    width: 85px;
+    height: 30px;
+    margin-top: 10px;
+}
 .learning_comments .learning_comments_enters img {
     width: 60px;
     height: 60px;
@@ -34,6 +39,7 @@
     height: 30px;
     border: none;
     border-bottom: 1px solid #dddd;
+    outline: none;
 }
 .learning_comments_contents {
     margin-top: 10px;
