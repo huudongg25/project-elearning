@@ -1,11 +1,20 @@
 import Api from "../apis/api";
+import { IntfLogin, IntfUser } from "../types/entities.type";
 
 class UserRepository {
   private _api: Api;
   constructor() {
     this._api = new Api();
   }
-
+  public async register(formRegister: IntfUser) {
+    return await this._api.Post("/auth/register", formRegister);
+  }
+  public async login(formLogin: any) {
+    return await this._api.Post("/auth/login", formLogin);
+  }
+  public async logout() {
+    await this._api.Logout("/users/logout");
+  }
   public async getUserInfoById(id: number): Promise<any> {
     return await this._api.GetById("/users", id);
   }

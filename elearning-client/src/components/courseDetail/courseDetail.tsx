@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./courseDetail.css";
 import { MdOutlineSpeed } from "react-icons/md";
 import { FaFilm } from "react-icons/fa";
@@ -6,53 +6,53 @@ import { FaClock } from "react-icons/fa";
 import { FaBatteryFull } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
 import CourseBox from "../course/courseBox/courseBox";
+import CoursesService from "../../services/course.service";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import UserService from "../../services/user.service";
+import { IntfCourse } from "../../types/entities.type";
 const CourseDetail = () => {
+  const idUser: string = localStorage.getItem("idUser") as string;
+  const [courseDetail, setCourseDetail] = useState<IntfCourse>();
+  const userService = new UserService();
+  const courseService = new CoursesService();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  let param: any = useParams();
+  let idCourse: number = param.id;
+  useEffect(() => {
+    const getCourses = async () => {
+      const result: any = await courseService.getCoursesById(idCourse);
+      const courseData = result.data;
+      setCourseDetail(courseData.data[0]);
+    };
+    getCourses();
+  }, [idCourse]);
+  const renderCourseIndex = () => {
+    if (!courseDetail || !courseDetail.completedContent) return null;
+    const completedContents = courseDetail.completedContent.split(".");
+    return completedContents.map((content, index) => (
+      <div className="course_detail_mini_title_checkLine">
+        <FaCheck className="checkLine_icon" />
+        <p>{content.trim()}</p>
+      </div>
+    ));
+  };
+
   return (
     <div className="course_detail_container">
       <div className="course_detail_container_body">
         <div className="course_detail_main">
           <div className="course_detail_main_title">
-            <h1>Lập Trình Javascript Cơ Bản</h1>
+            <h1>{courseDetail?.courseName}</h1>
             <p className="course_detail_main_desc">
-              Học Javascript cơ bản phù hợp cho người chưa từng học lập trình.
-              Với hơn 100 bài học và có bài tập thực hành sau mỗi bài học.
+              {courseDetail?.description}
             </p>
           </div>
           <div className="course_detail_mini_title">
             <h2>Bạn sẽ học được gì</h2>
             <div className="course_detail_mini_title_info">
-              <div className="course_detail_mini_title_checkLine">
-                <FaCheck className="checkLine_icon" />
-                <p>123123123123</p>
-              </div>
-              <div className="course_detail_mini_title_checkLine">
-                <FaCheck className="checkLine_icon" />
-                <p>123123123123</p>
-              </div>
-              <div className="course_detail_mini_title_checkLine">
-                <FaCheck className="checkLine_icon" />
-                <p>123123123123</p>
-              </div>
-              <div className="course_detail_mini_title_checkLine">
-                <FaCheck className="checkLine_icon" />
-                <p>123123123123</p>
-              </div>
-              <div className="course_detail_mini_title_checkLine">
-                <FaCheck className="checkLine_icon" />
-                <p>123123123123</p>
-              </div>
-              <div className="course_detail_mini_title_checkLine">
-                <FaCheck className="checkLine_icon" />
-                <p>123123123123</p>
-              </div>
-              <div className="course_detail_mini_title_checkLine">
-                <FaCheck className="checkLine_icon" />
-                <p>123123123123</p>
-              </div>
-              <div className="course_detail_mini_title_checkLine">
-                <FaCheck className="checkLine_icon" />
-                <p>123123123123</p>
-              </div>
+              {renderCourseIndex()}
             </div>
           </div>
           <div className="course_detail_mini_title">
@@ -66,31 +66,7 @@ const CourseDetail = () => {
               </p>
             </div>
             <ul className="course_detail_mini_title_courseIndex">
-              <li className="course_detail_mini_title_courseIndex_detail">
-                <p>
-                  <span>1</span> bài học
-                </p>
-              </li>
-              <li className="course_detail_mini_title_courseIndex_detail">
-                <p>
-                  <span>1</span> bài học
-                </p>
-              </li>
-              <li className="course_detail_mini_title_courseIndex_detail">
-                <p>
-                  <span>1</span> bài học
-                </p>
-              </li>
-              <li className="course_detail_mini_title_courseIndex_detail">
-                <p>
-                  <span>1</span> bài học
-                </p>
-              </li>
-              <li className="course_detail_mini_title_courseIndex_detail">
-                <p>
-                  <span>1</span> bài học
-                </p>
-              </li>
+              {/* {courses.map((item: any) => (item.price == 0 ? "" : ""))} */}
               <li className="course_detail_mini_title_courseIndex_detail">
                 <p>
                   <span>1</span> bài học
@@ -134,13 +110,34 @@ const CourseDetail = () => {
           </div>
         </div>
         <div className="course_detail_aside">
-          <CourseBox />
-          <p className="course_detail_aside_price">1.000.000đ</p>
-          <button className="course_detail_aside_button">ĐĂNG KÝ HỌC</button>
+          <div className="course_box">
+            <div className="course_box_content">
+              <Link to={`learning/${idCourse}`}>
+                <img
+                  className="CommonItem_thumb__ew8Jj"
+                  src={courseDetail?.image}
+                  alt={courseDetail?.courseName}
+                />
+              </Link>
+            </div>
+            <Link to={`learning/${idCourse}`}>
+              <p className="course_box_title"> {courseDetail?.courseName}</p>
+            </Link>
+            <p className="course_box_price">
+              {courseDetail?.price !== 0 ? courseDetail?.price : "Miễn phí"}
+            </p>
+          </div>
+          <Link to={`learning/${idCourse}`}>
+            <div className="course_detail_aside_button">ĐĂNG KÝ HỌC</div>
+          </Link>
           <div className="course_detail_aside_info">
             <div className="course_detail_aside_info_line">
               <MdOutlineSpeed />
-              <p>Trình độ cơ bản</p>
+              <p>
+                {courseDetail?.level == 1
+                  ? "Trình độ cơ bản"
+                  : "Trình độ nâng cao"}
+              </p>
             </div>
             <div className="course_detail_aside_info_line">
               <FaFilm />
@@ -156,7 +153,7 @@ const CourseDetail = () => {
             </div>
             <div className="course_detail_aside_info_line">
               <FaBatteryFull />
-              <p>Trình độ cơ bản</p>
+              <p>Đầy đủ giáo trình</p>
             </div>
           </div>
         </div>

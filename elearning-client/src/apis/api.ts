@@ -9,12 +9,15 @@ class Api {
   }
   async Get(endpoint: string, data?: any) {
     if (data) {
-      return PublicAxios.get(endpoint, {params: data});
+      return PublicAxios.get(endpoint, { params: data });
     } else {
       return await PrivateAxios.get(endpoint);
     }
   }
-  async Patch(endpoint: string, data: any,  id?: number,) {
+  async GetAll(endpoint: string): Promise<any> {
+    return await PrivateAxios.get(`${endpoint}/?role=user`);
+  }
+  async Patch(endpoint: string, data: any, id?: number) {
     if (id) {
       return await PrivateAxios.patch(`${endpoint}/${id}`, data);
     } else {
@@ -24,7 +27,7 @@ class Api {
   async Delete(endpoint: string, id: number) {
     return await PrivateAxios.delete(`${endpoint}/${id}`);
   }
-  async LogOut(endpoint: string) {
+  async Logout(endpoint: string) {
     await PrivateAxios.get(endpoint);
   }
   async GetById(endpoint: string, id: number) {
