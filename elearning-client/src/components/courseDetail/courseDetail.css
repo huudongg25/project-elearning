@@ -110,6 +110,10 @@ h1 {
     border-radius: 20px;
     background-color: #F16239;
     color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
 
 .course_detail_aside_button:hover {

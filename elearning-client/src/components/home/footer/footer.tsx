@@ -30,7 +30,7 @@ const Footer = () => {
         </div>
         <div className="footer_column">
           <div className="footer_column_head">
-            <p>VỀ Phoenix</p>
+            <p>VỀ PHOENIX</p>
           </div>
           <div className="footer_column_body">
             <nav>Giới thiệu</nav>
@@ -68,20 +68,20 @@ const Footer = () => {
         </div>
         <div className="footer_column_info">
           <div className="footer_column_head">
-            <p>CÔNG TY CỔ PHẦN CÔNG NGHỆ GIÁO DỤC F8</p>
+            <p>CÔNG TY CỔ PHẦN CÔNG NGHỆ GIÁO DỤC PHOENIX</p>
           </div>
           <div className="footer_column_body">
             <p>Mã số thuế: 0109922901</p>
             <p>Ngày thành lập: 04/03/2022</p>
             <p>
-              Lĩnh vực: Công nghệ, giáo dục, lập trình. F8 xây dựng và phát
+              Lĩnh vực: Công nghệ, giáo dục, lập trình. Phoenix xây dựng và phát
               triển những sản phẩm mang lại giá trị cho cộng đồng.
             </p>
           </div>
         </div>
       </div>
       <div className="footer_copyright">
-        <h4>© 2018 - 2024 F8. Nền tảng học lập trình hàng đầu Việt Nam</h4>
+        <h4>© 2018 - 2024 PHOENIX. Nền tảng học lập trình hàng đầu Việt Nam</h4>
         <div className="footer_icon">
           <FaFacebookSquare className="footer_icon_mini" />
           <FaYoutube className="footer_icon_mini" />

@@ -6,6 +6,7 @@
     background-color: white;
     z-index: 200;
     box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.05);
+    overflow: visible;
 
 }
 
@@ -39,6 +40,12 @@
 }
 
 /* phần search của header */
+.header_search_container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .header_search {
     position: relative;
 }
@@ -65,6 +72,48 @@
 
 .header_search_icon:hover {
     color: black;
+}
+
+.search_list_detail {
+    position: absolute;
+    border-radius: 20px;
+}
+
+#searchList {
+    height: auto;
+    max-height: 200px;
+    overflow-y: scroll;
+    background-color: rgb(246, 246, 246);
+    padding: 15px 10px;
+    min-width: 420px;
+    margin-top: 45px;
+}
+
+.product_search_name:hover {
+    background-color: #413f3f;
+    color: white;
+    padding: 10px;
+    height: 30px;
+    display: -webkit-box;
+    line-height: 1;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    text-align: center;
+    transition: 0.3s;
+}
+
+#searchList li {
+    padding-top: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+li:hover {
+    background-color: white;
+    border-radius: 10px;
 }
 
 /* phần nút đăng nhập/ đăng ký của login */

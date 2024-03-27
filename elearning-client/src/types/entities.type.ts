@@ -4,7 +4,7 @@ export interface IntfUser {
   lastName: string;
   email: string;
   password: string;
-  avatar: string;
+  avatar?: string;
   isBlocked?: number;
   isCommentBlocked?: number;
   createdAt?: string;

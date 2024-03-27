@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import "./lesson.css";
 import ReactPlayer from "react-player";
-import { CourseService } from "../../../services/courses.service";
 import { useDispatch } from "react-redux";
 import { setLessons } from "../../../store/reducers/lessonsReducer";
 import { useSelector } from "react-redux";
@@ -27,6 +26,7 @@ import { ToastContainer } from "react-toastify";
 import { ToastSuccess, ToastWarning } from "../../../common/toastify.common";
 import { RateService } from "../../../services/rates.service";
 import { setLessonState } from "../../../store/reducers/lessonState";
+import CoursesService from "../../../services/course.service";
 
 const Learning = () => {
   const [data, setData] = useState([]);
@@ -37,7 +37,7 @@ const Learning = () => {
   const location = useLocation();
   const endpoint = location.pathname.split("/");
   const courseId = endpoint[endpoint.length - 1];
-  const courseService = new CourseService();
+  const courseService = new CoursesService();
   const registeredCourseService = new RegisteredCourseService();
   const lessonUserService = new LessonUserService();
   const rateService = new RateService();
@@ -53,7 +53,7 @@ const Learning = () => {
     );
     setDetailRegisteredCourses(result);
     dispatch(setDetailRegisteredCourse(result));
-    if (result.completedLessons === result.totalLessons){
+    if (result.completedLessons === result.totalLessons) {
       const result = await rateService.getOneRate(1, Number(courseId));
       if (!result) {
         setIsRate(true);
@@ -130,8 +130,12 @@ const Learning = () => {
       detailRegisteredCourse.completedLessons <
       detailRegisteredCourse.totalLessons
     ) {
-      const completedLessons = detailRegisteredCourse.completedLessons + 1
-      await registeredCourseService.updateStateCourseUser(1, Number(courseId),completedLessons);
+      const completedLessons = detailRegisteredCourse.completedLessons + 1;
+      await registeredCourseService.updateStateCourseUser(
+        1,
+        Number(courseId),
+        completedLessons
+      );
     }
     getDetailRegisteredCourseUser();
   };
