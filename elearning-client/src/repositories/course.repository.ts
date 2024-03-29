@@ -6,20 +6,13 @@ export class CourseRepository {
   constructor() {
     this.apiService = new Api();
   }
-  public async onSearch(value: string) {
-    const result = await this.getAllCourses();
-    const searchCourses = result.filter((item: IntfCourse) =>
-      item.courseName.toLowerCase().includes(value)
-    );
-    return searchCourses;
-  }
-  async getAllCourses(): Promise<any> {
-    const result: any = await this.apiService.GetAll("courses");
+  async getAllCourses(form: any): Promise<any> {
+    const result: any = await this.apiService.Get("/courses/get-all",form);
     return result.data;
   }
 
   async getCoursesById(id: number): Promise<any> {
-    const result: any = await this.apiService.GetById("courses", id);
+    const result: any = await this.apiService.GetById("/courses/detail", id);
     return result;
   }
 
@@ -30,6 +23,6 @@ export class CourseRepository {
     await this.apiService.Post("courses", data);
   }
   async getDetailCourse(courseId: number) {
-    return this.apiService.GetById("/courses/detail", courseId);
+    return await this.apiService.GetById("/courses/detail", courseId);
   }
 }

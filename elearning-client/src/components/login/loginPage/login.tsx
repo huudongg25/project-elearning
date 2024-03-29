@@ -6,7 +6,8 @@ import { IntfLogin, IntfUser } from "../../../types/entities.type";
 import UserService from "../../../services/user.service";
 import { ToastSuccess, ToastWarning } from "../../../common/toastify.common";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 // interface Props {
 //   offLogin: Function;
 // }
@@ -24,6 +25,12 @@ const Login = () => {
   const userService = new UserService();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state === "logout") {
+      ToastSuccess("Logout Success!")
+    }
+  }, [location.state]);
   const [showLoginBox, setShowLoginBox] = useState(false);
   const [formRegister, setFormRegister] = useState<IntfUser>({
     firstName: "",
@@ -77,14 +84,14 @@ const Login = () => {
   // Đăng Nhập
 
   const handleLogin = async (e: MouseEvent<HTMLButtonElement>) => {
-    ToastSuccess("bấm đc");
     try {
       const data = await userService.login(formLogin);
-      if (data.status === 200) {
-        if (data.data.data.user.status === 1) {
-          localStorage.setItem("token", data.data.data.accessToken);
-          localStorage.setItem("user", JSON.stringify(data.data.data.user));
-          navigate("/");
+      console.log(data);
+      if (data.status === 201) {
+        if (data.data.user.user.isBlocked === 0) {
+          localStorage.setItem("token", data.data.user.accessToken);
+          localStorage.setItem("user", JSON.stringify(data.data.user.user));
+          navigate("/", {state: "login"});
           ToastSuccess("Đăng nhập thành công");
         } else {
           ToastWarning("Your account has been Blocked");
@@ -101,15 +108,16 @@ const Login = () => {
       }
     }
   };
+  
   return (
     <div className="login_container">
+      <ToastContainer/>
       <div className="login_container_body">
         <LoginBanner />
         <div className="info_box">
           {showLoginBox ? (
             <div className="login_body">
               <h2> Lập trình dễ dàng bắt đầu từ số 0. </h2>
-
               <div className="login_form">
                 <Form
                   {...formItemLayout}

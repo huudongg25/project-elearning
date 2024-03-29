@@ -17,6 +17,7 @@ interface Props {
     offIsRate:Function
 }
 const Rates = (props:Props): JSX.Element => {
+  const user = JSON.parse(localStorage.getItem('user') as string);
   const [rate, setRate] = React.useState<number>(4);
   const rateService = new RateService();
   const changeRateStar = (e: number) => {
@@ -25,7 +26,7 @@ const Rates = (props:Props): JSX.Element => {
   const handleCreateRate = async () => {
     if (rate === 0) {
     } else {
-      await rateService.createRate(1, Number(props.course?.courseId), rate);
+      await rateService.createRate(user.id, Number(props.course?.courseId), rate);
       setRate(4);
       alert("Rate Success!");
       props.offIsRate();

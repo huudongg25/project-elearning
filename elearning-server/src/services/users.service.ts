@@ -50,26 +50,23 @@ export class UserService {
 
   async updateProfile(
     id: number,
-    formUpdate: any,
     fileAvatar: Express.Multer.File
   ): Promise<void> {
-    if (fileAvatar) {
-        const newProfile = {
-            ...formUpdate,
-             avatar: fileAvatar.path
-        }
-        await this._userRepository.updateProfile(id,newProfile)
-    }else {
-        await this._userRepository.updateProfile(id,formUpdate)
-    }
+    const newProfile = {
+      avatar: fileAvatar.path,
+    };
+    await this._userRepository.updateProfile(id, newProfile);
   }
 
-  async block(id:number,key:any): Promise<void> {
-    const formBlock = {[key]:1}
-    await this._userRepository.updateProfile(id,formBlock)
+  async block(id: number, key: any): Promise<void> {
+    const formBlock = { [key]: 1 };
+    await this._userRepository.updateProfile(id, formBlock);
   }
-  async unblock(id:number,key:any): Promise<void> {
-    const formUnblock = {[key]:0}
-    await this._userRepository.updateProfile(id,formUnblock)
+  async unblock(id: number, key: any): Promise<void> {
+    const formUnblock = { [key]: 0 };
+    await this._userRepository.updateProfile(id, formUnblock);
+  }
+  async getById(id: number): Promise<any> {
+    return await this._userRepository.getById(id);
   }
 }

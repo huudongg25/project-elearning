@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./course.css";
-import CourseBox from "../courseBox/courseBox";
+import { HiMiniUserGroup } from "react-icons/hi2";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import UserService from "../../../services/user.service";
 import CoursesService from "../../../services/course.service";
+import formatPrice from "../../../common/formatPrice.common";
 const CoursePage = () => {
   const [courses, setCourses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,25 +16,16 @@ const CoursePage = () => {
   const toDetails = (id: number | undefined): void => {
     navigation("/courses/detail/" + id);
   };
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const courseService = new CoursesService();
   const userService = new UserService();
   useEffect(() => {
     const getCourse = async () => {
       const result = await courseService.getAllCourses();
       const courseDb = result.data;
-      const CoursesAfterFilter = courseDb.filter(
-        (item: any) => item.state === 0
-      );
-      const lastIndex = currentPage * coursesPerPage;
-      const firstIndex = lastIndex - coursesPerPage;
-      const currentCourses = CoursesAfterFilter.slice(firstIndex, lastIndex);
-      setAllCourse(CoursesAfterFilter);
-      setCourses(currentCourses);
+      setCourses(courseDb);
     };
     getCourse();
-  }, [currentPage]);
-  console.log(courses);
+  }, []);
 
   return (
     <div className="course_container">
@@ -41,22 +33,34 @@ const CoursePage = () => {
         <h3>Khóa học miễn phí :</h3>
         <div className="course_box_container">
           {courses.map((item: any) =>
-            item.price == 0 ? (
+            item.price === 0 ? (
               <div className="course_box">
                 <div className="course_box_content">
                   <Link to={`detail/${item.id}`}>
                     <img src={`${item.image}`} alt="Ảnh chương trình" />
                   </Link>
-                  <button
-                    className="course_box_content_watch_button"
-                    onClick={() => toDetails(item.id)}
-                  >
-                    Xem khóa học
-                  </button>
+                  <div className="course_box_content_watch">
+                    <button
+                      className="course_box_content_watch_button"
+                      onClick={() => toDetails(item.id)}
+                    >
+                      Xem khóa học
+                    </button>
+                  </div>
                 </div>
-                <Link to={`detail/${item.id}`}>
-                  <p className="course_box_title">{item.courseName}</p>
-                </Link>
+                <p className="course_box_title">{item.courseName}</p>
+                <span
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 5,
+                    marginTop: 10,
+                    color: "#999",
+                  }}
+                >
+                  <HiMiniUserGroup className="course_count" />{" "}
+                  {item.studentCount}
+                </span>
               </div>
             ) : (
               ""
@@ -80,26 +84,41 @@ const CoursePage = () => {
           )}
         </ul> */}
       </div>
-      <div className="course_box">
+      <div className="course_no_free">
         <h3>Khóa học tính phí :</h3>
         <div className="course_box_container">
           {courses.map((item: any) =>
-            item.price != 0 ? (
+            item.price !== 0 ? (
               <div className="course_box">
                 <div className="course_box_content">
                   <Link to={`detail/${item.id}`}>
                     <img src={`${item.image}`} alt="Ảnh chương trình" />
                   </Link>
-                  <button
-                    className="course_box_content_watch_button"
-                    onClick={() => toDetails(item.id)}
-                  >
-                    Xem khóa học
-                  </button>
+                  <div className="course_box_content_watch">
+                    <button
+                      className="course_box_content_watch_button"
+                      onClick={() => toDetails(item.id)}
+                    >
+                      Xem khóa học
+                    </button>
+                  </div>
                 </div>
-                <Link to={`detail/${item.id}`}>
-                  <p className="course_box_title">{item.courseName}</p>
-                </Link>
+                <span className="course_box_price">
+                  {formatPrice(item.price)}
+                </span>
+                <p className="course_box_title">{item.courseName}</p>
+                <span
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 5,
+                    marginTop: 10,
+                    color: "#999",
+                  }}
+                >
+                  <HiMiniUserGroup className="course_count" />{" "}
+                  {item.studentCount}
+                </span>
               </div>
             ) : (
               ""

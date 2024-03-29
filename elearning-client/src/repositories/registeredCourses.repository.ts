@@ -11,6 +11,14 @@ export class RegisteredCourseRepository {
   }
 
   async updateStateCourseUser(form: any) {
-    await this._api.Patch('/register-courses/finished-lessons',form)
+    await this._api.Patch("/register-courses/finished-lessons", form);
+  }
+
+  async create(form: any) {
+    await this._api.Post("/register-courses/create", form);
+  }
+
+  async getHistory(userId: number) {
+    return await this._api.GetById("/register-courses/get", userId);
   }
 }

@@ -27,9 +27,12 @@ import { ToastSuccess, ToastWarning } from "../../../common/toastify.common";
 import { RateService } from "../../../services/rates.service";
 import { setLessonState } from "../../../store/reducers/lessonState";
 import CoursesService from "../../../services/course.service";
+import Spin from "../../spin/spin";
 
 const Learning = () => {
+  const user = JSON.parse(localStorage.getItem("user") as string);
   const [data, setData] = useState([]);
+  const [spin, setSpin] = useState<boolean>(true);
   const [isRate, setIsRate] = useState<boolean>(false);
   const [detailCourse, setDetailCourse] = useState<any>();
   const [detailRegisteredCourse, setDetailRegisteredCourses] = useState<any>();
@@ -43,30 +46,36 @@ const Learning = () => {
   const rateService = new RateService();
   // Get
   const getDetailCourse = async () => {
+    setSpin(true);
     const result = await courseService.getDetailCourse(Number(courseId));
     setDetailCourse(result);
+    setSpin(false);
   };
   const getDetailRegisteredCourseUser = async () => {
+    setSpin(true);
     const result = await registeredCourseService.getDetailRegisteredCourseUser(
-      1,
+      user.id,
       Number(courseId)
     );
     setDetailRegisteredCourses(result);
     dispatch(setDetailRegisteredCourse(result));
     if (result.completedLessons === result.totalLessons) {
-      const result = await rateService.getOneRate(1, Number(courseId));
+      const result = await rateService.getOneRate(user.id, Number(courseId));
       if (!result) {
         setIsRate(true);
       }
+      setSpin(false);
     }
   };
   useEffect(() => {
+    setSpin(false);
     getDetailCourse();
     getDetailRegisteredCourseUser();
   }, []);
 
   // Merge
   useMemo(() => {
+    setSpin(true);
     const mergeArray = detailCourse?.lessons?.reduce(
       (result: any, lesson: any) => {
         const stateLesson = detailRegisteredCourse?.LessonUsers?.find(
@@ -79,27 +88,32 @@ const Learning = () => {
     );
     dispatch(setLessons(mergeArray));
     setData(mergeArray);
+    setSpin(false);
   }, [detailCourse?.lessons, detailRegisteredCourse?.LessonUsers]);
   const id = useSelector(selectLessonId);
   const lesson = detailCourse?.lessons.find((item: any) => item.id === id);
 
   // update
   const handlePlay = async () => {
+    setSpin(true);
     if (lesson) {
       await lessonUserService.createLessonUser(
         Number(lesson.id),
         Number(detailRegisteredCourse?.id)
       );
       getDetailRegisteredCourseUser();
+      setSpin(false);
     } else {
       await lessonUserService.createLessonUser(
         Number(detailCourse.lessons[0].id),
         Number(detailRegisteredCourse?.id)
       );
       getDetailRegisteredCourseUser();
+      setSpin(false);
     }
   };
   const handleEndVideo = async () => {
+    setSpin(true);
     if (id) {
       await lessonUserService.updateStateLessonUser(
         lesson.id,
@@ -112,6 +126,7 @@ const Learning = () => {
       if (newLesson) {
         dispatch(setLessonId(newId));
         dispatch(setLessonState(newLesson));
+        setSpin(false);
       }
     } else {
       await lessonUserService.updateStateLessonUser(
@@ -124,7 +139,10 @@ const Learning = () => {
       );
       dispatch(setLessonId(newId));
       dispatch(setLessonState(newLesson));
+      setSpin(false);
     }
+    setSpin(true);
+
     getDetailRegisteredCourseUser();
     if (
       detailRegisteredCourse.completedLessons <
@@ -132,12 +150,13 @@ const Learning = () => {
     ) {
       const completedLessons = detailRegisteredCourse.completedLessons + 1;
       await registeredCourseService.updateStateCourseUser(
-        1,
+        user.id,
         Number(courseId),
         completedLessons
       );
     }
     getDetailRegisteredCourseUser();
+    setSpin(false);
   };
 
   // Comment
@@ -147,12 +166,16 @@ const Learning = () => {
   const [isLoadComment, setIsLoadComment] = useState<boolean>(false);
   const [limit, setLimit] = useState(3);
   const getCountComments = async () => {
+    setSpin(true);
     const result = await commentService.getCountComment(Number(courseId));
     setCountComments(result);
+    setSpin(false);
   };
   const getComments = async () => {
+    setSpin(true);
     const result = await commentService.getComments(limit, Number(courseId));
     setComments(result);
+    setSpin(false);
   };
   useEffect(() => {
     getComments();
@@ -179,14 +202,21 @@ const Learning = () => {
     setCreateComment(e.target.value);
   };
   const handleCreateComment = async () => {
+    setSpin(true);
     if (createComment === "") {
+      // setSpin(false);
     } else {
-      await commentService.createComment(1, Number(courseId), createComment);
+      await commentService.createComment(
+        user.id,
+        Number(courseId),
+        createComment
+      );
       setCreateComment("");
       // ToastWarning("Comment Success!");
       alert("Comment Success!");
       getComments();
       getCountComments();
+      // setSpin(false);
     }
   };
   const offIsRate = () => {
@@ -194,10 +224,11 @@ const Learning = () => {
   };
   return (
     <section id="learning">
+      {/* {spin && <Spin />} */}
       <ToastContainer />
       <div className="learning_video">
         <ReactPlayer
-          url={id ? lesson.videoURL : detailCourse?.lessons[0].videoURL}
+          url={id ? lesson?.videoURL : detailCourse?.lessons[0].videoURL}
           width="100%"
           height={650}
           controls
@@ -206,11 +237,11 @@ const Learning = () => {
           playing={true}
         />
         <div className="learning_video_info">
-          <h2>{id ? lesson.title : detailCourse?.lessons[0].title}</h2>
+          <h2>{id ? lesson?.title : detailCourse?.lessons[0]?.title}</h2>
           <p>
             Cập nhật:{" "}
             {id
-              ? formatDate(String(lesson.updatedAt))
+              ? formatDate(String(lesson?.updatedAt))
               : formatDate(String(detailCourse?.lessons[0]?.updatedAt))}
           </p>
         </div>
@@ -250,7 +281,7 @@ const Learning = () => {
             })}
         </ul>
       </div>
-      {countComments === 0 || countComments === comments.length ? null : (
+      {countComments === 0 || countComments === comments?.length ? null : (
         <div className="learning_more">
           {isLoadComment ? (
             <img
