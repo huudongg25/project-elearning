@@ -14,9 +14,6 @@ class Api {
       return await PrivateAxios.get(endpoint);
     }
   }
-  async GetAll(endpoint: string): Promise<any> {
-    return await PrivateAxios.get(`${endpoint}/?role=user`);
-  }
   async Patch(endpoint: string, data: any, id?: number) {
     if (id) {
       return await PrivateAxios.patch(`${endpoint}/${id}`, data);

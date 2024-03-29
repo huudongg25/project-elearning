@@ -77,8 +77,7 @@ userController
       try {
         const id = Number(req.params.id);
         const fileAvatar = req.file as Express.Multer.File;
-        const formUpdate = req.body;
-        await userService.updateProfile(id, formUpdate, fileAvatar);
+        await userService.updateProfile(id, fileAvatar);
         res.status(StatusCode.OK).json({ msg: msg.UPDATE("USER") });
       } catch (error) {
         res
@@ -140,4 +139,20 @@ userController
           .json({ msg: msg.INTERNAL_SERVER_ERROR("LOGOUT") });
       }
     }
-  );
+  )
+  // Get by id
+  .get("/get/:id", async (req: express.Request, res: express.Response) => {
+    try {
+      const id = Number(req.params.id);
+      const result = await userService.getById(id);
+      res.status(StatusCode.OK).json(result);
+    } catch (error: any) {
+      if (error.status === 404) {
+        res.status(error.status).json({ msg: error.msg });
+      } else {
+        res
+          .status(StatusCode.INTERNAL_SERVER_ERROR)
+          .json({ msg: msg.INTERNAL_SERVER_ERROR("GET USER") });
+      }
+    }
+  })

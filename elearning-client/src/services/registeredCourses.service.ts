@@ -31,4 +31,21 @@ export class RegisteredCourseService {
             console.log(error);
         }
     }
+
+    async create(form: any){
+        try {
+            await this._registeredCourseRepository.create(form)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+    async getHistory(userId:number){
+        try {
+            const result = await this._registeredCourseRepository.getHistory(userId)
+            return result.data.data
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }

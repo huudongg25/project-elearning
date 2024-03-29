@@ -6,32 +6,23 @@ class UserService {
   constructor() {
     this._userRepository = new UserRepository();
   }
-  public async register(formRegister:IntfUser){
+  public async register(formRegister: IntfUser) {
     try {
-        const result = await this._userRepository.register(formRegister)
-        if (result.status === 201) {
-            return 1
-        }else {
-            return 2
-        }
+      const result = await this._userRepository.register(formRegister);
+      if (result.status === 201) {
+        return 1;
+      } else {
+        return 2;
+      }
     } catch (error) {
-        console.log(error);
-        
+      console.log(error);
     }
-}
+  }
   public async login(formLogin: IntfLogin) {
     return await this._userRepository.login(formLogin);
   }
   public async logout() {
     await this._userRepository.logout();
-  }
-  public async getUserInfo(id: number) {
-    try {
-      const data = await this._userRepository.getUserInfoById(id);
-      return data.data[0];
-    } catch (error) {
-      console.log(error);
-    }
   }
   public async updateUser(id: number, updateForm: any) {
     try {
@@ -66,6 +57,14 @@ class UserService {
       } else {
         return 2;
       }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  public async getById(id: number) {
+    try {
+      const result = await this._userRepository.getById(id);
+      return result.data  
     } catch (error) {
       console.log(error);
     }

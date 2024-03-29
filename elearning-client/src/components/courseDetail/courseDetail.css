@@ -44,16 +44,15 @@ h1 {
 .course_detail_mini_title_courseIndex_detail {
     background-color: #F5F5F5;
     padding: 20px 30px;
-    font-size: 20px;
+    font-size: 16px;
     border-radius: 10px;
     border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.course_detail_mini_title_courseIndex_detail:hover {
-    cursor: pointer;
-    background-color: transparent;
-    color: black;
-}
+
 
 .course_detail_mini_title_info {
     display: grid;
@@ -94,13 +93,19 @@ h1 {
     flex-direction: column;
     gap: 20px;
 }
+.course_detail_aside img {
+    width: 100%;
+    border-radius: 10px;
+}
+.course_detail_aside img:hover {
+    filter: brightness(0.6);
+}
 
 .course_detail_aside_price {
     font-size: 30px;
-    font-weight: 600;
     color: #F16239;
-    font-weight: 700;
-    font-size: 40px;
+    font-weight: 400;
+    font-size: 30px;
 }
 
 .course_detail_aside_button {

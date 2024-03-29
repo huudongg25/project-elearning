@@ -7,11 +7,14 @@ class CoursesService {
   constructor() {
     this.coursesRepository = new CourseRepository();
   }
-  async getAllCourses() {
-    const data = await this.coursesRepository.getAllCourses();
+  public async getAllCourses() {
+    const form = {
+      role: "user"
+    }
+    const data = await this.coursesRepository.getAllCourses(form);
     return data;
   }
-  async getDetailCourse(courseId: number) {
+  public async getDetailCourse(courseId: number) {
     try {
       const result = await this.coursesRepository.getDetailCourse(courseId);
       return result.data.data[0];
@@ -19,33 +22,19 @@ class CoursesService {
       console.log(error);
     }
   }
-
-  // async getCoursesCategory() {
-  //   const data = await this.coursesRepository.getCourse();
-  //   // data.filter((item:any)=>item.catetory==item)
-  //   return data;
-  // }
-
   public async getCoursesById(id: number): Promise<IntfCourse> {
     let result = await this.coursesRepository.getCoursesById(id);
-    return result;
+    return result.data.data[0];
   }
-
   public async onSearch(value: string) {
-    const result = await this.coursesRepository.getAllCourses();
-    const coursesData = result.data;
-    const searchCourses = coursesData.filter((item: IntfCourse) =>
-      item.courseName.toLowerCase().includes(value)
-    );
-    return searchCourses;
+    const form = {
+      role: "user",
+      search: value
+    }
+    const result = await this.coursesRepository.getAllCourses(form);
+    return result.data;
   }
-
-  // public async editcourses(id: number, data: IntfCourse {
-  //   await this.coursesRepository.patchNew(id, data);
-  // }
-  // public async addcourses(data: IntfCourse {
-  //   await this.coursesRepository.postcourses(data);
-  // }
+  
 }
 
 export default CoursesService;

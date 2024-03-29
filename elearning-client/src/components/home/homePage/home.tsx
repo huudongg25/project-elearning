@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./home.css";
 import Banner from "../banner/banner";
 import { FcAlphabeticalSortingAz } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { RiListOrdered } from "react-icons/ri";
 import { BsTranslate } from "react-icons/bs";
 import { IoBook } from "react-icons/io5";
 import { FaLaptop } from "react-icons/fa";
 import { BsBriefcaseFill } from "react-icons/bs";
+import { ToastContainer } from "react-toastify";
+import { ToastSuccess } from "../../../common/toastify.common";
 const Home = () => {
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state === "login") {
+      ToastSuccess("Đăng nhập thành công")
+    }
+  },[])
   return (
     <main className="home">
+      <ToastContainer/>
       <section className="home_container">
         <div className="home_banner">
           <Banner />

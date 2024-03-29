@@ -1,77 +1,49 @@
 import React, { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import "./header.css";
+import "react-toastify/dist/ReactToastify.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
 import { IntfCourse } from "../../../types/entities.type";
-import UserService from "../../../services/user.service";
-import { RiLogoutBoxRLine } from "react-icons/ri";
 import CoursesService from "../../../services/course.service";
+import UserService from "../../../services/user.service";
+import { CiEdit } from "react-icons/ci";
+import { ToastSuccess, ToastWarning } from "../../../common/toastify.common";
+import { ToastContainer } from "react-toastify";
+import Spin from "../../spin/spin";
 const Header = () => {
-  const [char, setChar] = useState<string>("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const idUser = localStorage.getItem("idUser") as string;
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const userService = new UserService();
   const coursesService = new CoursesService();
-  const status = useSelector((state: any) => state.update);
+  const [spin, setSpin] = useState<boolean>(true);
+  const [userDb, setUserDb] = useState<any>();
+  const [isAvatar, setIsAvatar] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
-  const token = localStorage.getItem("token");
+  const [isSearch, setIsSearch] = useState<boolean>(false);
   const [coursesData, setCoursesData] = useState<IntfCourse[]>([]);
-  const [sup, setSup] = useState<boolean>(false);
   const userString = localStorage.getItem("user") as string;
-  const location = useLocation();
   const user = JSON.parse(userString);
-  const [info, setUserInfo] = useState<any>();
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname === "/courses") {
+      setIsSearch(true);
+    } else {
+      setIsSearch(false);
+    }
+  }, [location]);
   let goToDetail = useNavigate();
   const toDetails = (id: number | undefined): void => {
-    goToDetail("/courses/learning/" + id);
+    goToDetail("/courses/detail/" + id);
     setSearch("");
   };
-  const autoLogin = () => {
-    if (!token && location.pathname === "/") {
-    }
+  const userService = new UserService();
+  const getUser = async () => {
+    setSpin(true);
+    const result = await userService.getById(user?.id);
+    setUserDb(result);
+    setSpin(false);
   };
   useEffect(() => {
-    const getUser = async () => {
-      if (idUser) {
-        const data: any = await userService.getUserInfo(Number(idUser));
-        let firstName: any = data.data.firstName;
-        let character: string = firstName.charAt(0);
-        setChar(character);
-      }
-    };
+    setSpin(true);
     getUser();
-  }, [status, idUser]);
-  const handleLogout = async () => {
-    await userService.logout();
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-    setSup(!sup);
-    navigate("/", { state: "logout" });
-  };
-  // Lấy thông tin render
-  const updateProfiles = useSelector((state: any) => state.updateProfile);
-  useEffect(() => {
-    const getUserInfo = async () => {
-      const data = await userService.getUserInfo(user?.id);
-      // console.log(data);
-      setUserInfo(data);
-    };
-    if (token) {
-      getUserInfo();
-    }
-    // return () => {
-    //   setUserInfo(undefined);
-    // }
-  }, [updateProfiles]);
-  // const handleOk = () => {
-  //   dispatch(logout());
-  //   navigate("/", { state: "logout" });
-  // };
-
+  }, []);
   const handleSearch = async (e: any) => {
     if (e.target.value !== "") {
       setSearch(e.target.value);
@@ -84,10 +56,43 @@ const Header = () => {
       const coursesSearch = await coursesService.onSearch(search);
       setCoursesData(coursesSearch);
     };
-    getCoursesSearch();
+    setTimeout(() => {
+      getCoursesSearch();
+    }, 1500);
   }, [search]);
+  // Avatar
+  const [avatars, setAvatars] = useState<any>();
+  const [fileUpdate, setFile] = useState<any>();
+  const handleAvatar = (e: any) => {
+    let file = e.target.files[0];
+    file.preview = URL.createObjectURL(file);
+    setAvatars(file);
+    setFile(file);
+  };
+  useEffect(() => {
+    return () => {
+      avatars && URL.revokeObjectURL(avatars.preview);
+    };
+  }, [avatars]);
+  const handleUpdateAvatar = async () => {
+    setSpin(true)
+    const formData = new FormData();
+    formData.append("avatar", fileUpdate);
+    const result = await userService.updateUser(Number(user.id), formData);
+    if (result === 1) {
+      ToastSuccess("Profile updated successfully");
+      getUser();
+      setSpin(false);
+      setIsAvatar(false)
+    } else {
+      ToastWarning("Update Failed");
+      setSpin(false);
+      setIsAvatar(false)
+    }
+  };
   return (
     <header className="header">
+      {spin && <Spin/>}
       <section className="header_container">
         <div className="header_logo">
           <Link to={"/"}>
@@ -99,17 +104,20 @@ const Header = () => {
           <h4>Học lập trình để đi làm</h4>
         </div>
         <div className="header_search_container">
-          <div className="header_search">
-            <IoIosSearch className="header_search_icon" />
-            <input
-              type="text"
-              placeholder="Tìm kiếm bài học..."
-              className="header_search_bar"
-              id="search_feature"
-              onChange={handleSearch}
-              value={search}
-            />
-          </div>
+          {isSearch ? (
+            <div className="header_search">
+              <IoIosSearch className="header_search_icon" />
+              <input
+                type="text"
+                placeholder="Tìm kiếm bài học..."
+                className="header_search_bar"
+                id="search_feature"
+                onChange={handleSearch}
+                value={search}
+              />
+            </div>
+          ) : null}
+
           {search.length > 0 ? (
             <div className="search_list_detail">
               <ul id="searchList">
@@ -133,31 +141,43 @@ const Header = () => {
             ""
           )}
         </div>
-
-        {!idUser ? (
-          <div className="header_button">
-            {/* <button className="header_button_login">Đăng nhập</button> */}
-            <Link to={"/login"}>
-              <button className="header_button_register">Đăng ký</button>
-            </Link>
-          </div>
-        ) : (
-          <div className="header_user_services">
-            <div className="header_border" />
-            <div className="header_user toolTip" id="user_avatar">
-              <Link to={"/profile"} className="user_avatar_box">
-                {char}
-              </Link>
+        <div className="header_sup_info">
+          <p>{`Hi! ${user.firstName} ${user.lastName}`}</p>
+          <img
+            onClick={() => setIsAvatar(true)}
+            src={userDb?.avatar}
+            alt="avatar"
+          />
+          {isAvatar ? (
+            <div onClick={() => setIsAvatar(false)} className="header_profiles">
+              <div onClick={(e:any) => e.stopPropagation()} className="header_profile">
+                <div className="header_profile_actions">
+                  <img
+                    src={avatars?.preview ? avatars?.preview : userDb?.avatar}
+                    alt="avatar"
+                  />
+                  <div className="header_profile_action">
+                    <label htmlFor="avatar">
+                      <CiEdit
+                        style={{ fontSize: 30 }}
+                        className=".my_course_icon_avatar"
+                      />
+                    </label>
+                    <input
+                      onChange={handleAvatar}
+                      style={{ display: "none" }}
+                      id="avatar"
+                      type="file"
+                    />
+                  </div>
+                </div>
+                <button onClick={handleUpdateAvatar}>Change Avatar</button>
+              </div>
             </div>
-            <div className="header_user toolTip" id="logout_btn">
-              <RiLogoutBoxRLine />
-              <span className="toolTipText" style={{ marginTop: 17 }}>
-                Logout
-              </span>
-            </div>
-          </div>
-        )}
+          ) : null}
+        </div>
       </section>
+      <ToastContainer />
     </header>
   );
 };
