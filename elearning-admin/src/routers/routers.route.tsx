@@ -3,9 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import DefaultLayout from "../layouts/defaultLayout/defaultLayout";
 import AdminHome from "../components/home/homePage/homePage";
 import AdminCourse from "../components/courses/adminCourse";
-import AdminMessages from "../components/messages/messages";
+import AdminMessages from "../components/comments/comment";
 import AdminUsers from "../components/users/users";
-import Login from "../components/login/login";
 import AdminLogin from "../components/login/login";
 
 const Routers = (): JSX.Element => {
@@ -14,18 +13,18 @@ const Routers = (): JSX.Element => {
       <Routes>
         <Route path="/" element={<DefaultLayout child={<AdminHome />} />} />
         <Route
-          path="/adminCourses"
+          path="/admins/Courses"
           element={<DefaultLayout child={<AdminCourse />} />}
         />
         <Route
-          path="/adminMessages"
+          path="/admins/Comments"
           element={<DefaultLayout child={<AdminMessages />} />}
         />
         <Route
-          path="/adminUsers"
+          path="/admins/Users"
           element={<DefaultLayout child={<AdminUsers />} />}
         />
-        <Route path="/adminLogin" element={<AdminLogin />} />
+        <Route path="/admins/Login" element={<AdminLogin />} />
       </Routes>
     </>
   );

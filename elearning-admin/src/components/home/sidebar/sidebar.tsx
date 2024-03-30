@@ -16,22 +16,22 @@ const Sidebar = () => {
             <p>DashBoard</p>
           </div>
         </Link>
-        <Link to={"/adminCourses"}>
+        <Link to={"/admins/Courses"}>
           <div className="sidebar_nav">
             <HiBookOpen className="sidebar_nav_icon" />
             <p>Courses</p>
           </div>
         </Link>
-        <Link to={"/adminUsers"}>
+        <Link to={"/admins/Users"}>
           <div className="sidebar_nav">
             <HiUsers className="sidebar_nav_icon" />
             <p>Users</p>
           </div>
         </Link>
-        <Link to={"/adminMessages"}>
+        <Link to={"/admins/Comments"}>
           <div className="sidebar_nav">
             <TiMessages className="sidebar_nav_icon" />
-            <p>Messages</p>
+            <p>Comments</p>
           </div>
         </Link>
       </div>

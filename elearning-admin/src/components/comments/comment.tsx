@@ -1,16 +1,16 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import type { TableColumnsType } from "antd";
 import { Popconfirm, Table } from "antd";
-import "./users.css";
-import { IntfUser } from "../../types/interface";
+import "./comment.css";
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import formatPrice from "../../common/formatPrice.common";
-import UserService from "../../services/user.service";
+import CommentsService from "../../services/comment.service";
 import { IoIosSearch } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import LessonService from "../../services/lesson.service";
 import { update } from "../../store/reducers/update";
+import { IntfComment } from "../../types/interface";
 
 interface TableParams {
   pagination?: TablePaginationConfig;
@@ -19,21 +19,21 @@ interface TableParams {
   filters?: Record<string, FilterValue>;
 }
 
-const AdminUser: React.FC = () => {
-  const userService = new UserService();
-  const [users, setUser] = useState<any[]>([]);
+const AdminComments: React.FC = () => {
+  const commentService = new CommentsService();
+  const [comments, setComments] = useState<any[]>([]);
   const [modalEdit, setModalEdit] = useState<boolean>(false);
   const [modalAdd, setModalAdd] = useState<boolean>(false);
-  const [dataEdit, setDataEdit] = useState<IntfUser>();
-  const [FreeUser, setFreeUser] = useState<boolean>(false);
+  const [dataEdit, setDataEdit] = useState<IntfComment>();
+  const [FreeComments, setFreeComments] = useState<boolean>(false);
   const [expandedLessons, setExpandedLessons] = useState<any[]>([]); // Trạng thái mới
   const updateStatus = useSelector((state: any) => state.update);
   const dispatch = useDispatch();
 
   const [searchValue, setSearchValue] = useState<string>("");
-  const getUser = async () => {
-    const result = await userService.getAllUsers();
-    setUser(result);
+  const getComments = async () => {
+    const result = await commentService.getAllComments();
+    setComments(result);
   };
 
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -45,7 +45,7 @@ const AdminUser: React.FC = () => {
   const handleTableChange: any = (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue>,
-    sorter: SorterResult<IntfUser>
+    sorter: SorterResult<IntfComment>
   ) => {
     setTableParams({
       pagination,
@@ -53,10 +53,10 @@ const AdminUser: React.FC = () => {
       ...sorter,
     });
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      setUser([]);
+      setComments([]);
     }
   };
-  const columns: TableColumnsType<IntfUser> = [
+  const columns: TableColumnsType<IntfComment> = [
     // {
     //   key: "id",
     //   title: "Id",
@@ -64,50 +64,22 @@ const AdminUser: React.FC = () => {
     //   render: (dataIndex, record: any) => <span>{dataIndex}</span>,
     // },
     {
-      key: "Email",
-      title: "email",
-      dataIndex: "email",
+      key: "userId",
+      title: "User ID",
+      dataIndex: "userId",
       render: (dataIndex, record: any) => <span>{dataIndex}</span>,
     },
     {
-      key: "lastName",
-      title: "Last Name",
-      dataIndex: "lastName",
+      key: "courseId",
+      title: "Course ID",
+      dataIndex: "courseId",
       render: (dataIndex, record: any) => <span>{dataIndex}</span>,
     },
     {
-      key: "firstName",
-      title: "First Name",
-      dataIndex: "firstName",
+      key: "content",
+      title: "Comment Content",
+      dataIndex: "content",
       render: (dataIndex, record: any) => <span>{dataIndex}</span>,
-    },
-    {
-      key: "avatar",
-      title: "Avatar",
-      dataIndex: "avatar",
-      render: (dataIndex, record: any) => (
-        <img
-          style={
-            record.isDelete === 1
-              ? {
-                  height: "135px",
-                  width: "135px",
-                  objectFit: "cover",
-                  borderRadius: "10px",
-                }
-              : {
-                  borderRadius: "10px",
-                  height: "100%",
-                  width: "100%",
-                  objectFit: "cover",
-                  opacity: 0.3,
-                }
-          }
-          src={dataIndex}
-          alt="ảnh avatar"
-        />
-      ),
-      width: "10%",
     },
 
     {
@@ -115,57 +87,47 @@ const AdminUser: React.FC = () => {
       title: "Action",
       dataIndex: "",
       render: (dataIndex: number, record: any) => (
-        <div className="user_action_button">
-          <button>Block</button>
+        <div className="comment_action_button">
+          <button>Active Comment</button>
           <button>Block Comment</button>
         </div>
       ),
     },
   ];
-  const fetchData = async () => {
-    setTableParams({
-      ...tableParams,
-      pagination: {
-        ...tableParams.pagination,
-        total: users.length,
-      },
-    });
-  };
-  const offModalEdit = () => {
-    setModalEdit(false);
-  };
-  const offModalAdd = () => {
-    setModalAdd(false);
-  };
+  // const fetchData = async () => {
+  //   setTableParams({
+  //     ...tableParams,
+  //     pagination: {
+  //       ...tableParams.pagination,
+  //       total: comments.length,
+  //     },
+  //   });
+  // };
 
   const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setSearchValue(newValue);
     if (newValue !== "") {
       const searchString = newValue.toLowerCase();
-      const usersAfterFilter = users.filter((user) =>
-        user.firstName.toLowerCase().includes(searchString)
+      const commentsAfterFilter = comments.filter((comment) =>
+        comment.firstName.toLowerCase().includes(searchString)
       );
-      setUser(usersAfterFilter);
+      setComments(commentsAfterFilter);
     } else {
-      getUser();
+      getComments();
     }
   };
-  const handleShowUser = () => {
-    setFreeUser(!FreeUser);
-  };
-
   useEffect(() => {
-    fetchData();
-    getUser();
+    // fetchData();
+    getComments();
   }, [JSON.stringify(tableParams), updateStatus]);
 
   return (
     <>
-      <div className="admin_user_page_container">
-        <div className="admin_user_page_header">
-          <h2>User :</h2>
-          <div className="search_user">
+      <div className="admin_comment_page_container">
+        <div className="admin_comment_page_header">
+          <h2>Comments :</h2>
+          <div className="search_comment">
             <IoIosSearch className="search_icon" />
             <input
               onChange={handleChangeSearch}
@@ -179,7 +141,7 @@ const AdminUser: React.FC = () => {
         </div>
         <Table
           columns={columns}
-          dataSource={users}
+          dataSource={comments}
           pagination={tableParams.pagination}
           onChange={handleTableChange}
         />
@@ -188,4 +150,4 @@ const AdminUser: React.FC = () => {
   );
 };
 
-export default AdminUser;
+export default AdminComments;
