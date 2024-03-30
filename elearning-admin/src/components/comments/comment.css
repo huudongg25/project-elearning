@@ -1,4 +1,4 @@
-.admin_user_page_container {
+.admin_comment_page_container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -6,14 +6,14 @@
     gap: 50px;
 }
 
-.admin_user_page_header {
+.admin_comment_page_header {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 30px;
 }
 
-.search_user {
+.search_comment {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -44,7 +44,7 @@
     color: black;
 }
 
-.admin_user_button {
+.admin_comment_button {
     background-color: #174fe8;
     color: white;
     font-weight: 600;
@@ -53,13 +53,13 @@
     border-radius: 20px;
 }
 
-.admin_user_button:hover {
+.admin_comment_button:hover {
     background-color: white;
     border: 0.5px solid #174fe8;
     color: #174fe8;
 }
 
-.user_action_button {
+.comment_action_button {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -67,7 +67,7 @@
     justify-content: center;
 }
 
-.user_action_button button {
+.comment_action_button button {
     background-color: #174fe8;
     color: white;
     font-weight: 600;
@@ -77,7 +77,7 @@
 }
 
 
-.user_action_button button:hover,
+.comment_action_button button:hover,
 .admin_lesson_action_button button:hover {
     filter: brightness(0.8);
 }

@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
-import "./header.css";
-import { Link } from "react-router-dom";
 import { RiLogoutBoxRLine } from "react-icons/ri";
+import { Link, useNavigate } from "react-router-dom";
+import "./header.css";
+
 const Header = () => {
+  const navigate = useNavigate();
+  const [adminFirstName, setAdminFirstName] = useState("");
+
+  useEffect(() => {
+    const adminAccessToken = localStorage.getItem("admin");
+    if (!adminAccessToken) {
+      navigate("/admins/login");
+    } else {
+      const adminInfo = JSON.parse(localStorage.getItem("admin") || "{}");
+      const firstName = adminInfo.admin.firstName;
+      if (firstName) {
+        const firstLetter = firstName.charAt(0).toUpperCase();
+        setAdminFirstName(firstLetter);
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("admin");
+    navigate("/admins/login");
+  };
+
   return (
     <header className="header">
       <section className="header_container">
@@ -16,22 +39,14 @@ const Header = () => {
           </Link>
           <h4>Phoenix Academy</h4>
         </div>
-        <div className="header_search">
-          <IoIosSearch className="header_search_icon" />
-          <input
-            type="text"
-            placeholder="Tìm kiếm ..."
-            className="header_search_bar"
-          />
-        </div>
         <div className="header_info">
           <div className="header_info_admin">
             <div className="header_info_admin_avatar">
-              <p>B</p>
+              <p>{adminFirstName}</p>
             </div>
             <p>Admin</p>
           </div>
-          <button className="header_info_button">
+          <button className="header_info_button" onClick={handleLogout}>
             <RiLogoutBoxRLine className="header_info_button_icon" />
           </button>
         </div>
