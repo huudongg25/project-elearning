@@ -1,4 +1,4 @@
-import { Popconfirm } from "antd";
+import { Button, Popconfirm } from "antd";
 import "react-toastify/dist/ReactToastify.css";
 import "./modalAdd.css";
 import React, { ChangeEvent, useEffect, useState, MouseEvent } from "react";
@@ -12,7 +12,6 @@ interface Props {
   offModalAdd: Function;
 }
 const ModalAdd = (props: Props) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [newCourse, setNewCourse] = useState({
     courseName: "",
     price: "",
@@ -20,12 +19,9 @@ const ModalAdd = (props: Props) => {
     completedContent: "",
     level: "",
     categoryId: "",
-    img: "",
+    image: "",
   });
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
-  //   Validate Blur
+
   const handleBlurInput = (e: ChangeEvent<HTMLInputElement>) => {
     const spanElements = e.target.parentElement?.querySelector(
       ".ruleBlur"
@@ -38,20 +34,19 @@ const ModalAdd = (props: Props) => {
       spanElements.innerText = "";
     }
   };
-  const [pic, setPic] = useState<any>();
+  const [image, setImage] = useState<any>();
   const [fileUpdate, setFile] = useState<any>();
-  const handleAvatar = (e: any) => {
+  const handleImage = (e: any) => {
     let file = e.target.files[0];
     file.preview = URL.createObjectURL(file);
-    setPic(file);
+    setImage(file);
     setFile(file);
   };
   useEffect(() => {
     return () => {
-      pic && URL.revokeObjectURL(pic.preview);
+      image && URL.revokeObjectURL(image.preview);
     };
-  }, [pic]);
-  //   Get value new course
+  }, [image]);
   const changeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setNewCourse({
       ...newCourse,
@@ -65,8 +60,6 @@ const ModalAdd = (props: Props) => {
       level: e.target.value,
     });
   };
-
-  //  Validate rule and request API
   const courseService = new CourseService();
   const dispatch = useDispatch();
   const handleAddNewCourse = async () => {
@@ -76,7 +69,6 @@ const ModalAdd = (props: Props) => {
       newCourse.courseName === "" ||
       newCourse.price === "" ||
       newCourse.level === "" ||
-      fileUpdate === "" ||
       newCourse.description === ""
     ) {
       ToastWarning("Please enter all field");
@@ -88,10 +80,8 @@ const ModalAdd = (props: Props) => {
       formData.append("price", newCourse.price);
       formData.append("categoryId", newCourse.categoryId);
       formData.append("level", newCourse.level);
-      formData.append("pic", fileUpdate);
+      formData.append("image", fileUpdate);
       const result = await courseService.addCourse(formData);
-      console.log(formData + "1");
-
       if (result === 2) {
         ToastWarning("Course create failed");
       } else {
@@ -108,8 +98,8 @@ const ModalAdd = (props: Props) => {
         <div className="modalAddImg">
           <img
             src={
-              pic?.preview
-                ? pic.preview
+              image?.preview
+                ? image.preview
                 : "https://as1.ftcdn.net/v2/jpg/00/99/63/86/1000_F_99638655_RNePZuhfOSOjRZvnZMJKsjmmpRoO04YI.jpg"
             }
             alt=""
@@ -119,7 +109,7 @@ const ModalAdd = (props: Props) => {
               <MdAddPhotoAlternate />
             </label>
             <input
-              onChange={handleAvatar}
+              onChange={handleImage}
               style={{ display: "none" }}
               type="file"
               name="img"
@@ -177,34 +167,37 @@ const ModalAdd = (props: Props) => {
             <span className="ruleBlur"></span>
           </div>
           <div className="modalAddInput">
-            <select onChange={handleChangeSelect} name="" id="">
+            <select onChange={handleChangeSelect} name="level" id="">
               <option value="0">--Level--</option>
-              <option value="1">Cơ bản</option>
-              <option value="2">Trung cấp</option>
-              <option value="3">Nâng cao</option>
+              <option value="1">1.Cơ bản</option>
+              <option value="2">2.Trung Bình</option>
+              <option value="3">3.Nâng cao</option>
             </select>
           </div>
           <div className="modalAddInput">
             <select onChange={handleChangeSelect} name="category" id="">
               <option value="0">--Category--</option>
-              <option value="1">FrontEnd</option>
-              <option value="2">BackEnd</option>
-              <option value="3">DataBase</option>
-              <option value="4">Orm</option>
+              <option value="1">1.FrontEnd</option>
+              <option value="2">2.BackEnd</option>
+              <option value="3">3.DataBase</option>
             </select>
           </div>
         </div>
         <div className="modalAddActions">
-          <Popconfirm
+          {/* <Popconfirm
             title="Update "
             description="Are you sure about this information?"
             onConfirm={handleAddNewCourse}
             okText="Yes"
             cancelText="No"
           >
-            <button>ADD+</button>
-          </Popconfirm>
-          <button onClick={() => props.offModalAdd()}>CANCEL</button>
+          </Popconfirm> */}
+          <Button onClick={handleAddNewCourse} type="primary">
+            ADD
+          </Button>
+          <Button onClick={() => props.offModalAdd()} type="primary">
+            CANCEL
+          </Button>
         </div>
       </div>
     </div>

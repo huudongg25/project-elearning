@@ -3,6 +3,7 @@ import { IoIosSearch } from "react-icons/io";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import "./header.css";
+import { ToastWarning } from "../../../common/toastify.common";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ const Header = () => {
     const adminAccessToken = localStorage.getItem("admin");
     if (!adminAccessToken) {
       navigate("/admins/login");
+      ToastWarning("You have to Login to access!");
     } else {
       const adminInfo = JSON.parse(localStorage.getItem("admin") || "{}");
       const firstName = adminInfo.admin.firstName;

@@ -68,18 +68,19 @@
 }
 
 .course_action_button button {
-    background-color: #174fe8;
-    color: white;
+    background-color: transparent;
+    color: #174fe8;
     font-weight: 600;
     border: none;
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
+    border: 1px solid #174fe8;
 }
 
 
 .course_action_button button:hover,
 .admin_lesson_action_button button:hover {
-    filter: brightness(0.8);
+    filter: brightness(0.6);
 }
 
 .admin_lesson_action_button {
@@ -88,10 +89,11 @@
 }
 
 .admin_lesson_action_button button {
-    background-color: #174fe8;
-    color: white;
+    background-color: transparent;
+    color: #174fe8;
     font-weight: 600;
     border: none;
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
+    border: 1px solid #174fe8;
 }

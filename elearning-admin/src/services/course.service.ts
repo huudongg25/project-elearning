@@ -1,5 +1,6 @@
 import { RiNumber0 } from "react-icons/ri";
 import CourseRepository from "../repositories/course.repositories";
+import { IntfCourse } from "../types/interface";
 
 class CourseService {
   private courseRepository: CourseRepository;
@@ -22,7 +23,6 @@ class CourseService {
   }
   public async addCourse(data: any) {
     try {
-      console.log(data + "service");
       const result = await this.courseRepository.postCourse(data);
       if (result.status === 201) {
         return 1;
@@ -48,6 +48,9 @@ class CourseService {
 
   public async deleteCourse(id: number) {
     await this.courseRepository.deleteCourse(id);
+  }
+  public async editCourse(id: number, data: IntfCourse) {
+    await this.courseRepository.updateCourse(id, data);
   }
 }
 
