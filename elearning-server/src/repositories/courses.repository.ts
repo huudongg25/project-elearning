@@ -82,8 +82,6 @@ export class CourseRepository {
       include: [
         { model: Lesson },
         { model: Category },
-        // { model: RatingCourse, where: { isActive: 1 } },
-        // { model: CommentCourse, where: { isActive: 1 } },
       ],
       where: {
         id: id,

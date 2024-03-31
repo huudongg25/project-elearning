@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import "./header.css";
-import "react-toastify/dist/ReactToastify.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IntfCourse } from "../../../types/entities.type";
 import CoursesService from "../../../services/course.service";
 import UserService from "../../../services/user.service";
 import { CiEdit } from "react-icons/ci";
-import { ToastSuccess, ToastWarning } from "../../../common/toastify.common";
-import { ToastContainer } from "react-toastify";
+import toast, { Toaster } from "react-hot-toast";
 import Spin from "../../spin/spin";
 const Header = () => {
   const coursesService = new CoursesService();
@@ -75,24 +73,37 @@ const Header = () => {
     };
   }, [avatars]);
   const handleUpdateAvatar = async () => {
-    setSpin(true)
+    setSpin(true);
     const formData = new FormData();
     formData.append("avatar", fileUpdate);
     const result = await userService.updateUser(Number(user.id), formData);
     if (result === 1) {
-      ToastSuccess("Profile updated successfully");
       getUser();
       setSpin(false);
-      setIsAvatar(false)
+      setIsAvatar(false);
+      toast.success("Thay avatar thành công!", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     } else {
-      ToastWarning("Update Failed");
       setSpin(false);
-      setIsAvatar(false)
+      setIsAvatar(false);
+      toast.error("Thay avatar tất bại!", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     }
   };
   return (
     <header className="header">
-      {spin && <Spin/>}
+      {spin && <Spin />}
+      <Toaster position="top-center" reverseOrder={false} />
       <section className="header_container">
         <div className="header_logo">
           <Link to={"/"}>
@@ -150,7 +161,10 @@ const Header = () => {
           />
           {isAvatar ? (
             <div onClick={() => setIsAvatar(false)} className="header_profiles">
-              <div onClick={(e:any) => e.stopPropagation()} className="header_profile">
+              <div
+                onClick={(e: any) => e.stopPropagation()}
+                className="header_profile"
+              >
                 <div className="header_profile_actions">
                   <img
                     src={avatars?.preview ? avatars?.preview : userDb?.avatar}
@@ -171,13 +185,14 @@ const Header = () => {
                     />
                   </div>
                 </div>
-                <button onClick={handleUpdateAvatar}>Change Avatar</button>
+                {avatars?.preview ? (
+                  <button onClick={handleUpdateAvatar}>Change Avatar</button>
+                ) : null}
               </div>
             </div>
           ) : null}
         </div>
       </section>
-      <ToastContainer />
     </header>
   );
 };

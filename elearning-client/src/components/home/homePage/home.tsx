@@ -8,19 +8,25 @@ import { BsTranslate } from "react-icons/bs";
 import { IoBook } from "react-icons/io5";
 import { FaLaptop } from "react-icons/fa";
 import { BsBriefcaseFill } from "react-icons/bs";
-import { ToastContainer } from "react-toastify";
-import { ToastSuccess } from "../../../common/toastify.common";
+import toast, { Toaster } from "react-hot-toast";
+
 const Home = () => {
   const location = useLocation();
   useEffect(() => {
     if (location.state === "login") {
-      ToastSuccess("Đăng nhập thành công")
+      toast.success("Đăng nhập thành công!", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     }
-  },[])
+  }, [location]);
   return (
     <main className="home">
-      <ToastContainer/>
       <section className="home_container">
+        <Toaster position="top-center" reverseOrder={false} />
         <div className="home_banner">
           <Banner />
         </div>

@@ -4,13 +4,9 @@ import { Button, Form, Input } from "antd";
 import LoginBanner from "../loginBanner/loginBanner";
 import { IntfLogin, IntfUser } from "../../../types/entities.type";
 import UserService from "../../../services/user.service";
-import { ToastSuccess, ToastWarning } from "../../../common/toastify.common";
-import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-// interface Props {
-//   offLogin: Function;
-// }
+import toast, { Toaster } from "react-hot-toast";
+
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -23,12 +19,17 @@ const formItemLayout = {
 };
 const Login = () => {
   const userService = new UserService();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
     if (location.state === "logout") {
-      ToastSuccess("Logout Success!")
+      toast.success("Đăng xuất thành công!", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     }
   }, [location.state]);
   const [showLoginBox, setShowLoginBox] = useState(false);
@@ -69,7 +70,13 @@ const Login = () => {
     // setIsLoading(true);
     const data = await userService.register(formRegister);
     if (data === 1) {
-      ToastSuccess("Register Success");
+      toast.success("Đăng ký thành công!", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
       setShowLoginBox(true);
       setFormRegister({
         firstName: "",
@@ -78,7 +85,13 @@ const Login = () => {
         password: "",
       });
     } else {
-      ToastWarning("Please check all information again");
+      toast.error("Hãy check lại thông tin!", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     }
   };
   // Đăng Nhập
@@ -86,32 +99,57 @@ const Login = () => {
   const handleLogin = async (e: MouseEvent<HTMLButtonElement>) => {
     try {
       const data = await userService.login(formLogin);
-      console.log(data);
       if (data.status === 201) {
         if (data.data.user.user.isBlocked === 0) {
           localStorage.setItem("token", data.data.user.accessToken);
           localStorage.setItem("user", JSON.stringify(data.data.user.user));
-          navigate("/", {state: "login"});
-          ToastSuccess("Đăng nhập thành công");
+          navigate("/", { state: "login" });
         } else {
-          ToastWarning("Your account has been Blocked");
+          toast.error(
+            "Tài khoản của bạn đã bị khóa!. Xin liên hệ với chúng tôi qua 999999 để giải quyết",
+            {
+              style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
+              },
+            }
+          );
           return;
         }
       }
     } catch (error: any) {
       if (error.response.status === 500) {
-        ToastWarning("Login Failed");
+        toast.error("Đăng nhập thất bại!", {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
       } else if (error.response.status === 404) {
-        ToastWarning("Email is not exist!");
+        toast.error("Email không tồn tại!", {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
       } else if (error.response.status === 400) {
-        ToastWarning("Password incorrect!");
+        toast.error("Sai mật khẩu!", {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
       }
     }
   };
-  
+
   return (
     <div className="login_container">
-      <ToastContainer/>
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="login_container_body">
         <LoginBanner />
         <div className="info_box">

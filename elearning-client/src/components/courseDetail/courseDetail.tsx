@@ -7,15 +7,13 @@ import { FaBatteryFull } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
 import CoursesService from "../../services/course.service";
 import { Link, useParams } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
 import {
   formatDuration,
   formatDurationTitle,
 } from "../../common/formatDuration.common";
 import formatPrice from "../../common/formatPrice.common";
 import { RegisteredCourseService } from "../../services/registeredCourses.service";
-import { ToastContainer } from "react-toastify";
-import { ToastSuccess } from "../../common/toastify.common";
+import toast, { Toaster } from "react-hot-toast";
 import PaypalComponent from "../paypal/paypal";
 import Spin from "../spin/spin";
 const CourseDetail = () => {
@@ -80,7 +78,13 @@ const CourseDetail = () => {
       };
       await registeredCourseService.create(form);
       await getDetailRegisteredCourse();
-      ToastSuccess("Đăng ký khóa học thành công");
+      toast.success("Đăng ký học thành công!", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
       setSpin(false);
     }
   };
@@ -90,7 +94,7 @@ const CourseDetail = () => {
   return (
     <div className="course_detail_container">
       {spin && <Spin />}
-      <ToastContainer />
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="course_detail_container_body">
         <div className="course_detail_main">
           <div className="course_detail_main_title">

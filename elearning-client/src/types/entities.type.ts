@@ -29,7 +29,10 @@ export interface IntfCourse {
   image: string;
   price: number;
 }
-
+export interface ICategory {
+  id?: number;
+  name: string;
+}
 export interface IntfLesson {
   courseId: number;
   title: string;
@@ -63,4 +66,15 @@ export interface IntfAdmin {
 export interface IntfError {
   status: number;
   msg: string;
+}
+export interface ICourseDetail extends IntfCourse , IntfLesson , ICategory{
+  categoryId: number;
+  level: number;
+  courseName: string;
+  description: string;
+  completedContent: string;
+  image: string;
+  price: number;
+  lessons: IntfLesson[];
+  category: ICategory;
 }

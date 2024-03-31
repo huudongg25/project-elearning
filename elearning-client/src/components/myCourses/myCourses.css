@@ -36,3 +36,8 @@
     font-size: 25px;
     color: #999;
 }
+.my_course_img_empty {
+    width: 500px;
+    height: 400px;
+    transform: translateX(500px);
+}

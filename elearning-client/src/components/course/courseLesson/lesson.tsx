@@ -6,7 +6,6 @@ import React, {
   useState,
 } from "react";
 import "./lesson.css";
-import ReactPlayer from "react-player";
 import { useDispatch } from "react-redux";
 import { setLessons } from "../../../store/reducers/lessonsReducer";
 import { useSelector } from "react-redux";
@@ -22,13 +21,12 @@ import formatDate from "../../../common/formatDate.common";
 import { setDetailRegisteredCourse } from "../../../store/reducers/detailRegisteredCourse";
 import Rates from "../../rate/rate";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
-import { ToastSuccess, ToastWarning } from "../../../common/toastify.common";
+import toast, { Toaster } from "react-hot-toast";
 import { RateService } from "../../../services/rates.service";
 import { setLessonState } from "../../../store/reducers/lessonState";
 import CoursesService from "../../../services/course.service";
 import Spin from "../../spin/spin";
-
+import ReactPlayer from "react-player";
 const Learning = () => {
   const user = JSON.parse(localStorage.getItem("user") as string);
   const [data, setData] = useState([]);
@@ -62,13 +60,13 @@ const Learning = () => {
     if (result.completedLessons === result.totalLessons) {
       const result = await rateService.getOneRate(user.id, Number(courseId));
       if (!result) {
-        setIsRate(true);
+        setIsRate(false);
       }
       setSpin(false);
     }
   };
   useEffect(() => {
-    setSpin(false);
+    setSpin(true);
     getDetailCourse();
     getDetailRegisteredCourseUser();
   }, []);
@@ -142,7 +140,6 @@ const Learning = () => {
       setSpin(false);
     }
     setSpin(true);
-
     getDetailRegisteredCourseUser();
     if (
       detailRegisteredCourse.completedLessons <
@@ -204,7 +201,7 @@ const Learning = () => {
   const handleCreateComment = async () => {
     setSpin(true);
     if (createComment === "") {
-      // setSpin(false);
+      setSpin(false);
     } else {
       await commentService.createComment(
         user.id,
@@ -212,20 +209,26 @@ const Learning = () => {
         createComment
       );
       setCreateComment("");
-      // ToastWarning("Comment Success!");
-      alert("Comment Success!");
       getComments();
       getCountComments();
-      // setSpin(false);
+      setSpin(false);
+      toast.success("Bình luận thành công!", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     }
   };
   const offIsRate = () => {
     setIsRate(false);
   };
+
   return (
     <section id="learning">
-      {/* {spin && <Spin />} */}
-      <ToastContainer />
+      {spin && <Spin />}
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="learning_video">
         <ReactPlayer
           url={id ? lesson?.videoURL : detailCourse?.lessons[0].videoURL}
