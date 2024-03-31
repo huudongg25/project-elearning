@@ -1,76 +1,58 @@
-import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react";
-import "./modalEdit.css";
-import { MdAddPhotoAlternate } from "react-icons/md";
+import { Button } from "antd";
 import "react-toastify/dist/ReactToastify.css";
+import "./modalEdit.css";
+import React, { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
+import { MdAddPhotoAlternate } from "react-icons/md";
 import { update } from "../../store/reducers/update";
-import { ToastContainer } from "react-toastify";
-import { Popconfirm } from "antd";
+import { ToastError, ToastSuccess } from "../../common/toastify.common";
 import CourseService from "../../services/course.service";
-import { ToastSuccess, ToastWarning } from "../../common/toastify.common";
+import { IntfCourse } from "../../types/interface";
 interface Props {
   offModalEdit: Function;
   dataEdit: any;
 }
-
-const ModalEdit = (props: Props): JSX.Element => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
-  // Set avatar
-  const [avatars, setAvatars] = useState<any>();
-  const [fileUpdate, setFile] = useState<any>();
-  const handleAvatar = (e: any) => {
-    let file = e.target.files[0];
-    file.preview = URL.createObjectURL(file);
-    setAvatars(file);
-    setFile(file);
-  };
-  useEffect(() => {
-    return () => {
-      avatars && URL.revokeObjectURL(avatars.preview);
-    };
-  }, [avatars]);
-  const [updateData, setUpdateData] = useState(props.dataEdit);
-  // Update
+const ModalEdit = (props: Props) => {
+  const [updateCourse, setUpdateCourse] = useState<IntfCourse>(props.dataEdit);
   const dispatch = useDispatch();
-  const handleOpenEdit = (e: MouseEvent<HTMLElement>) => {
-    const spanElements = e.target as HTMLElement;
-    const inputElements = spanElements.parentElement?.querySelector(
-      "input"
-    ) as HTMLInputElement;
-    spanElements.style.fontSize = "20px";
-    spanElements.style.color = "#000";
-    inputElements.style.border = "1px solid #000";
-    inputElements.removeAttribute("disabled");
-  };
+  const [image, setImage] = useState<string>(props.dataEdit.image);
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setUpdateData({
-      ...updateData,
+    setUpdateCourse({
+      ...updateCourse,
       [e.target.name]: e.target.value,
     });
   };
-  const courseService = new CourseService();
-  const handleUpdateProduct = async (id: number) => {
-    setIsLoading(true);
-    const formData = new FormData();
-    formData.append("name", updateData.name);
-    formData.append("allergens", updateData.allergens);
-    formData.append("desc", updateData.desc);
-    formData.append("ingredients", updateData.ingredients);
-    formData.append("price", updateData.price);
-    formData.append("stock", updateData.stock);
-    formData.append("courses", fileUpdate);
-    const result = await courseService.updateCourse(id, formData);
-    if (result === 1) {
-      props.offModalEdit();
+  const handleChangeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    setUpdateCourse({
+      ...updateCourse,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleImage = (e: any) => {
+    if (e.target.files && e.target.files.length) {
+      const file = e.target.files[0];
+      file.preview = URL.createObjectURL(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      setImage(file);
+    }
+  };
+
+  const handleUpdateCourse = async (id: number) => {
+    try {
+      const courseService = new CourseService();
+      await courseService.editCourse(id, {
+        ...updateCourse,
+        image,
+      });
       dispatch(update());
-      setIsLoading(false);
-      ToastSuccess("Updated course successfully");
-    } else {
-      setIsLoading(false);
-      ToastWarning("Product update failed");
+      props.offModalEdit();
+      ToastSuccess("Update course successful");
+    } catch (error: any) {
+      ToastError("Update course failed");
     }
   };
 
@@ -79,101 +61,87 @@ const ModalEdit = (props: Props): JSX.Element => {
       <div className="modalEdit">
         <div className="modalEditImg">
           <img
-            src={avatars?.preview ? avatars.preview : props.dataEdit.images}
+            src={
+              image ||
+              "https://as1.ftcdn.net/v2/jpg/00/99/63/86/1000_F_99638655_RNePZuhfOSOjRZvnZMJKsjmmpRoO04YI.jpg"
+            }
             alt=""
           />
           <div className="selectFile">
             <label htmlFor="photo">
               <MdAddPhotoAlternate />
             </label>
-            <input
-              onChange={handleAvatar}
-              style={{ display: "none" }}
-              type="file"
-              name=""
-              id="photo"
-            />
+            <input onChange={handleImage} type="file" name="img" id="photo" />
           </div>
         </div>
         <div className="modalEditInputs">
           <div className="modalEditInput">
             <input
-              value={updateData.name}
               onChange={handleChangeInput}
-              disabled
+              value={updateCourse.courseName}
+              placeholder="Course Name"
               type="text"
-              name="name"
+              name="courseName"
               id=""
             />
-            <span onClick={handleOpenEdit}>edit</span>
           </div>
           <div className="modalEditInput">
             <input
-              value={updateData.desc}
               onChange={handleChangeInput}
-              disabled
+              value={updateCourse.description}
+              placeholder="Describe"
               type="text"
-              name="desc"
+              name="description"
               id=""
             />
-            <span onClick={handleOpenEdit}>edit</span>
           </div>
           <div className="modalEditInput">
             <input
-              value={updateData.ingredients}
               onChange={handleChangeInput}
-              disabled
+              value={updateCourse.completedContent}
+              placeholder="content"
               type="text"
-              name="ingredients"
+              name="completedContent"
               id=""
             />
-            <span onClick={handleOpenEdit}>edit</span>
           </div>
           <div className="modalEditInput">
             <input
-              value={updateData.allergens}
               onChange={handleChangeInput}
-              disabled
-              type="text"
-              name="allergens"
-              id=""
-            />
-            <span onClick={handleOpenEdit}>edit</span>
-          </div>
-          <div className="modalEditInput">
-            <input
-              value={updateData.price}
-              onChange={handleChangeInput}
-              disabled
+              value={updateCourse.price}
+              placeholder="Price"
               type="text"
               name="price"
               id=""
             />
-            <span onClick={handleOpenEdit}>edit</span>
           </div>
           <div className="modalEditInput">
-            <input
-              value={updateData.stock}
-              onChange={handleChangeInput}
-              disabled
-              type="text"
-              name="stock"
-              id=""
-            />
-            <span onClick={handleOpenEdit}>edit</span>
+            <select onChange={handleChangeSelect} name="level" id="">
+              <option value="0">{updateCourse.level}</option>
+              <option value="1">1.Cơ bản</option>
+              <option value="2">2.Trung Bình</option>
+              <option value="3">3.Nâng cao</option>
+            </select>
+          </div>
+          <div className="modalEditInput">
+            <select onChange={handleChangeSelect} name="category" id="">
+              <option value="0">{updateCourse.categoryId}</option>
+              <option value="1">1.FrontEnd</option>
+              <option value="2">2.BackEnd</option>
+              <option value="3">3.DataBase</option>
+            </select>
           </div>
         </div>
         <div className="modalEditActions">
-          <Popconfirm
-            title="Update "
-            description="Are you sure about this information?"
-            onConfirm={() => handleUpdateProduct(props.dataEdit.id)}
-            okText="Yes"
-            cancelText="No"
+          <Button
+            onClick={() => handleUpdateCourse(props.dataEdit.id)}
+            type="primary"
           >
-            <button>UPDATE</button>
-          </Popconfirm>
-          <button onClick={() => props.offModalEdit()}>CANCEL</button>
+            EDIT
+          </Button>
+          <Button onClick={() => props.offModalEdit()} type="primary">
+            CANCEL
+          </Button>
         </div>
       </div>
     </div>

@@ -16,6 +16,9 @@ class LessonRepository {
   async updateLesson(id: number, data: any) {
     return await this.apiService.Patch("/lessons/update", id, data);
   }
+  async deleteLesson(id: number) {
+    return await this.apiService.Delete("/lessons/delete", id);
+  }
 }
 
 export default LessonRepository;

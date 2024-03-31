@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import type { TableColumnsType } from "antd";
 import { Popconfirm, Table } from "antd";
 import "./adminCourse.css";
-import { IntfCourse } from "../../types/interface";
+import { IntfCourse, IntfLesson } from "../../types/interface";
 import type { FilterValue, SorterResult } from "antd/es/table/interface";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import formatPrice from "../../common/formatPrice.common";
@@ -13,6 +13,9 @@ import LessonService from "../../services/lesson.service";
 import ModalAdd from "../modalAddCourse/modalAdd";
 import ModalEdit from "../modalEditCourse/modalEdit";
 import { update } from "../../store/reducers/update";
+import CourseInfo from "../courseTextDesc/courseInfo";
+import ModalEditLesson from "../modalEditLesson/modalEdit";
+import ModalAddLesson from "../modalAddLesson/modalAdd";
 
 interface TableParams {
   pagination?: TablePaginationConfig;
@@ -28,12 +31,18 @@ const AdminCourse: React.FC = () => {
   const [lessons, setLessons] = useState<any[]>([]);
   const [modalEdit, setModalEdit] = useState<boolean>(false);
   const [modalAdd, setModalAdd] = useState<boolean>(false);
+  const [modalEditLesson, setModalEditLesson] = useState<boolean>(false);
+  const [modalAddLesson, setModalAddLesson] = useState<boolean>(false);
   const [dataEdit, setDataEdit] = useState<IntfCourse>();
+  const [dataEditLesson, setDataEditLesson] = useState<IntfLesson>();
+  const [courseId, setCourseId] = useState<number>();
   const [FreeCourse, setFreeCourse] = useState<boolean>(false);
-  const [expandedLessons, setExpandedLessons] = useState<any[]>([]); // Trạng thái mới
+  const [expandedLessons, setExpandedLessons] = useState<any[]>([]);
+  const [imageForEdit, setImageForEdit] = useState<any>();
   const updateStatus = useSelector((state: any) => state.update);
+  const [expandedDescription, setExpandedDescription] =
+    useState<boolean>(false);
   const dispatch = useDispatch();
-
   const [searchValue, setSearchValue] = useState<string>("");
   const getCourse = async () => {
     const result = await courseService.getAllCourses();
@@ -62,6 +71,25 @@ const AdminCourse: React.FC = () => {
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
       setCourse([]);
     }
+  };
+  const handleGetDataEdit = (record: IntfCourse) => {
+    setDataEdit(record);
+  };
+  const handleGetDataEditLesson = (lesson: IntfLesson) => {
+    setDataEditLesson(lesson);
+  };
+
+  const offModalEdit = () => {
+    setModalEdit(false);
+  };
+  const offModalAdd = () => {
+    setModalAdd(false);
+  };
+  const offModalEditLesson = () => {
+    setModalEditLesson(false);
+  };
+  const offModalAddLesson = () => {
+    setModalAddLesson(false);
   };
   const columns: TableColumnsType<IntfCourse> = [
     {
@@ -108,20 +136,28 @@ const AdminCourse: React.FC = () => {
       key: "description",
       title: "Description",
       dataIndex: "description",
-      render: (dataIndex, record: any) => <span>{dataIndex}</span>,
+      render: (dataIndex, record: any) => (
+        <>
+          {dataIndex.length > 30 ? <CourseInfo text={dataIndex} /> : dataIndex}
+        </>
+      ),
     },
     {
       key: "completedContent",
       title: "Completed Content",
       dataIndex: "completedContent",
-      render: (dataIndex, record: any) => <span>{dataIndex}</span>,
+      render: (dataIndex, record: any) => (
+        <>
+          {dataIndex.length > 30 ? <CourseInfo text={dataIndex} /> : dataIndex}
+        </>
+      ),
     },
     {
       key: "price",
       title: "Price",
       dataIndex: "price",
       render: (dataIndex, record: any) => (
-        <span
+        <p
           style={
             record.isDelete === 2
               ? { textDecoration: "line-through" }
@@ -129,7 +165,7 @@ const AdminCourse: React.FC = () => {
           }
         >
           {formatPrice(dataIndex)}
-        </span>
+        </p>
       ),
       width: "15%",
       sorter: (a: any, b: any) => Number(a.price) - Number(b.price),
@@ -140,17 +176,23 @@ const AdminCourse: React.FC = () => {
       dataIndex: "",
       render: (dataIndex: number, record: any) => (
         <div className="course_action_button">
-          <Popconfirm
-            title="Delete this Products"
-            description="Are you sure to delete it?"
-            onConfirm={() => handleDeleteConfirm(record.id)}
-            okText="Yes"
-            cancelText="No"
+          <button onClick={() => handleDeleteCourse(record.id)}>Delete</button>
+          <button
+            onClick={() => {
+              handleGetDataEdit(record);
+              setModalEdit(true);
+            }}
           >
-            <button>Delete</button>
-          </Popconfirm>
-          <button>Edit</button>
-          <button>Add Lesson</button>
+            Edit
+          </button>
+          <button
+            onClick={() => {
+              setCourseId(Number(record.id));
+              setModalAddLesson(true);
+            }}
+          >
+            Add Lesson
+          </button>
         </div>
       ),
     },
@@ -164,21 +206,14 @@ const AdminCourse: React.FC = () => {
       },
     });
   };
-  const offModalEdit = () => {
-    setModalEdit(false);
-  };
-  const offModalAdd = () => {
-    setModalAdd(false);
-  };
-  const handleGetDataEdit = (record: IntfCourse) => {
-    setDataEdit(record);
-  };
-  const handleDeleteConfirm = (id: number) => {
-    console.log("Confirmed to delete ID:", id);
-    handleIsDelete(id);
-  };
-  const handleIsDelete = async (id: number) => {
+
+  const handleDeleteCourse = async (id: number) => {
     await courseService.deleteCourse(id);
+    dispatch(update());
+  };
+  const handleDeleteLesson = async (id: number) => {
+    await lessonService.deleteLesson(id);
+    dispatch(update());
   };
   const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -217,45 +252,49 @@ const AdminCourse: React.FC = () => {
     const lessonsForCurrentCourse = lessons.filter(
       (lesson) => lesson.courseId === Number(record.id)
     );
-    console.log(lessonsForCurrentCourse);
-
     return (
-      <div className="admin_course_lesson_detail_container">
-        <Table
-          columns={[
-            { title: "Title", dataIndex: "title", key: "title" },
-            {
-              title: "Position",
-              dataIndex: "position",
-              key: "position",
-            },
-            {
-              title: "Duration",
-              dataIndex: "duration",
-              key: "duration",
-            },
-            {
-              title: "Video Url",
-              dataIndex: "videoURL",
-              key: "videoURL",
-              render: (videoUrl: string) => <a href={videoUrl}>{videoUrl}</a>,
-            },
-            {
-              key: "key",
-              title: "Action",
-              dataIndex: "",
-              render: () => (
-                <div className="admin_lesson_action_button">
-                  <button>Delete</button>
-                  <button onClick={() => setModalEdit(true)}>Edit</button>
-                </div>
-              ),
-            },
-          ]}
-          dataSource={lessonsForCurrentCourse}
-          // pagination={true}
-        />
-      </div>
+      <Table
+        columns={[
+          { title: "Title", dataIndex: "title", key: "title" },
+          {
+            title: "Position",
+            dataIndex: "position",
+            key: "position",
+          },
+          {
+            title: "Duration",
+            dataIndex: "duration",
+            key: "duration",
+          },
+          {
+            title: "Video Url",
+            dataIndex: "videoURL",
+            key: "videoURL",
+            render: (videoUrl: string) => <a href={videoUrl}>{videoUrl}</a>,
+          },
+          {
+            key: "key",
+            title: "Action",
+            dataIndex: "",
+            render: (_, lesson: any) => (
+              <div className="admin_lesson_action_button">
+                <button onClick={() => handleDeleteLesson(lesson.id)}>
+                  Delete
+                </button>
+                <button
+                  onClick={() => {
+                    handleGetDataEditLesson(lesson);
+                    setModalEditLesson(true);
+                  }}
+                >
+                  Edit
+                </button>
+              </div>
+            ),
+          },
+        ]}
+        dataSource={lessonsForCurrentCourse}
+      />
     );
   };
 
@@ -303,6 +342,18 @@ const AdminCourse: React.FC = () => {
         <ModalEdit dataEdit={dataEdit} offModalEdit={offModalEdit} />
       ) : null}
       {modalAdd ? <ModalAdd offModalAdd={offModalAdd} /> : null}
+      {modalEditLesson ? (
+        <ModalEditLesson
+          dataEditLesson={dataEditLesson}
+          offModalLessonEdit={offModalEditLesson}
+        />
+      ) : null}
+      {modalAddLesson ? (
+        <ModalAddLesson
+          courseId={courseId}
+          offModalLessonAdd={offModalAddLesson}
+        />
+      ) : null}
     </>
   );
 };

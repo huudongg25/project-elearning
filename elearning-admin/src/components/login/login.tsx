@@ -60,7 +60,7 @@ const AdminLogin = () => {
       } else if (result === 2) {
         ToastWarning("Password is incorrect");
       } else {
-        localStorage.setItem("token", result.accessToken);
+        localStorage.setItem("token", result.admin.accessToken);
         localStorage.setItem("admin", JSON.stringify(result.admin));
         navigate("/");
       }
@@ -75,7 +75,7 @@ const AdminLogin = () => {
           style={{ maxWidth: 800 }}
           className="login_form"
         >
-          <h4>Email</h4>
+          <h4>Username</h4>
           <Form.Item
             name="userName"
             rules={[{ required: true, message: "Email can't be blank!" }]}
