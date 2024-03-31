@@ -1,7 +1,7 @@
 import { RegisteredCourseService } from "../../services/registeredCourses.service";
-import { ToastSuccess } from "../../common/toastify.common";
 import { PayPalButtons } from "@paypal/react-paypal-js";
-import { useMemo } from "react";
+import toast, { Toaster } from "react-hot-toast";
+
 
 interface Props {
   amount: number;
@@ -20,9 +20,14 @@ const PaypalComponent = (props: Props) => {
       price: props.amount * 24000,
     }
     await registeredCourse.create(form);
-    ToastSuccess("Đăng ký khóa học thành công");
+    toast.success("Đăng ký thành công khóa học!", {
+      style: {
+        borderRadius: "10px",
+        background: "#333",
+        color: "#fff",
+      },
+    });
   };
-  console.log(props.amount);
 
   return (
     <PayPalButtons
