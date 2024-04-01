@@ -3,18 +3,17 @@ import { Course } from "../entities/courses.entity";
 import { Lesson } from "../entities/lessons.entity";
 import { Category } from "../entities/categories.entity";
 import { RatingCourse } from "../entities/ratingCourse.entity";
-import { CommentCourse } from "../entities/commentCourse.entity";
 
 export class CourseRepository {
   async createCourse(formCourse: any): Promise<void> {
     await Course.create(formCourse);
   }
-  async deleteCourse(id: number): Promise<void> {
-    await Course.destroy({ where: { id } });
+  async deleteCourse(id: number): Promise<number> {
+    return await Course.destroy({ where: { id } });
   }
 
-  async updateCourse(id: number, formUpdate: any): Promise<any> {
-    await Course.update(formUpdate, { where: { id } });
+  async updateCourse(id: number, formUpdate: any): Promise<number[]> {
+    return await Course.update(formUpdate, { where: { id } });
   }
 
   async getAllCourses(
@@ -28,6 +27,7 @@ export class CourseRepository {
     if (role === "user") {
       if (search !== "undefined") {
         return await Course.findAll({
+          include: { model: RatingCourse },
           where: {
             courseName: {
               [Op.like]: `%${search}%`,
@@ -35,17 +35,21 @@ export class CourseRepository {
           },
         });
       } else if (search === "undefined") {
-        return await Course.findAll();
+        return await Course.findAll({
+          include: { model: RatingCourse },
+        });
       }
     } else if (role === "admin") {
       if (search === "undefined" && sort === "undefined") {
         return await Course.findAll({
+          include: { model: RatingCourse },
           offset: offset,
           limit: limit,
         });
       }
       if (search !== "undefined" && sort === "undefined") {
         return await Course.findAll({
+          include: { model: RatingCourse },
           offset: offset,
           limit: limit,
           where: {
@@ -57,6 +61,7 @@ export class CourseRepository {
       }
       if (search === "undefined" && sort !== "undefined") {
         return await Course.findAll({
+          include: { model: RatingCourse },
           offset: offset,
           limit: limit,
           order: [[keySort, sort]],
@@ -64,6 +69,7 @@ export class CourseRepository {
       }
       if (search !== "undefined" && sort !== "undefined") {
         return await Course.findAll({
+          include: { model: RatingCourse },
           offset: offset,
           limit: limit,
           where: {
@@ -78,10 +84,11 @@ export class CourseRepository {
   }
 
   async getDetailCourse(id: number): Promise<any> {
-    return await Course.findAll({
+    return await Course.findOne({
       include: [
         { model: Lesson },
         { model: Category },
+        { model: RatingCourse },
       ],
       where: {
         id: id,

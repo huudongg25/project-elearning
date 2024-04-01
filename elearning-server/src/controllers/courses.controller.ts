@@ -27,8 +27,6 @@ courseController
         await courseService.createCourse(formCourse, fileImage);
         res.status(StatusCode.CREATED).json({ msg: msg.CREATED("COURSE") });
       } catch (error) {
-        console.log(error);
-
         res
           .status(StatusCode.INTERNAL_SERVER_ERROR)
           .json({ msg: msg.INTERNAL_SERVER_ERROR("COURSE") });
@@ -45,10 +43,14 @@ courseController
         const id = Number(req.params.id);
         await courseService.deleteCourse(id);
         res.status(StatusCode.OK).json({ msg: msg.DELETE("COURSE") });
-      } catch (error) {
-        res
-          .status(StatusCode.INTERNAL_SERVER_ERROR)
-          .json({ msg: msg.INTERNAL_SERVER_ERROR("COURSE DELETE") });
+      } catch (error: any) {
+        if (error.status === 404) {
+          res.status(error.status).json({ msg: error.msg });
+        } else {
+          res
+            .status(StatusCode.INTERNAL_SERVER_ERROR)
+            .json({ msg: msg.INTERNAL_SERVER_ERROR("COURSE DELETE") });
+        }
       }
     }
   )
@@ -64,56 +66,56 @@ courseController
         const formUpdate = req.body;
         await courseService.updateCourse(id, formUpdate, fileImage);
         res.status(StatusCode.OK).json({ msg: msg.UPDATE("COURSE") });
-      } catch (error) {
-        res
-          .status(StatusCode.INTERNAL_SERVER_ERROR)
-          .json({ msg: msg.INTERNAL_SERVER_ERROR("COURSE UPDATE") });
+      } catch (error: any) {
+        if (error.status === 404) {
+          res.status(error.status).json({ msg: error.msg });
+        } else {
+          res
+            .status(StatusCode.INTERNAL_SERVER_ERROR)
+            .json({ msg: msg.INTERNAL_SERVER_ERROR("COURSE UPDATE") });
+        }
       }
     }
   )
   //   Get Courses (search, sort, page)
-  .get(
-    "/get-all",
-    async (req: express.Request, res: express.Response) => {
-      try {
-        const search = String(req.query.search) || "";
-        const sort = String(req.query.sort) || "";
-        const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 5;
-        const keySort = String(req.query.key);
-        const role = String(req.query.role);
-        const result = await courseService.getAllCourses(
-          role,
-          keySort,
-          search,
-          sort,
-          page,
-          limit
-        );
-        res
-          .status(StatusCode.OK)
-          .json({ msg: msg.GET("COURSES"), data: result });
-      } catch (error) {
-        res
-          .status(StatusCode.INTERNAL_SERVER_ERROR)
-          .json({ msg: msg.INTERNAL_SERVER_ERROR("GET ALL COURSES") });
-      }
+  .get("/get-all", async (req: express.Request, res: express.Response) => {
+    try {
+      const search = String(req.query.search) || "";
+      const sort = String(req.query.sort) || "";
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 5;
+      const keySort = String(req.query.key);
+      const role = String(req.query.role);
+      const result = await courseService.getAllCourses(
+        role,
+        keySort,
+        search,
+        sort,
+        page,
+        limit
+      );
+      res.status(StatusCode.OK).json({ msg: msg.GET("COURSES"), data: result });
+    } catch (error) {
+      res
+        .status(StatusCode.INTERNAL_SERVER_ERROR)
+        .json({ msg: msg.INTERNAL_SERVER_ERROR("GET ALL COURSES") });
     }
-  )
+  })
   // Detail course
-  .get(
-    "/detail/:id",
-    async (req: express.Request, res: express.Response) => {
-      try {
-        const courseId = Number(req.params.id);
-        const result = await courseService.getDetailCourse(courseId);
-        res
-          .status(StatusCode.OK)
-          .json({ msg: msg.GET("COURSE DETAIL"), data: result });
-      } catch (error) {
+  .get("/detail/:id", async (req: express.Request, res: express.Response) => {
+    try {
+      const courseId = Number(req.params.id);
+      const result = await courseService.getDetailCourse(courseId);
+      res
+        .status(StatusCode.OK)
+        .json({ msg: msg.GET("COURSE DETAIL"), data: result });
+    } catch (error: any) {
+      if (error.status === 404) {
+        res.status(error.status).json({ msg: error.msg });
+      } else {
         res
           .status(StatusCode.INTERNAL_SERVER_ERROR)
           .json({ msg: msg.INTERNAL_SERVER_ERROR("GET DETAIL COURSE") });
       }
     }
-  );
+  });

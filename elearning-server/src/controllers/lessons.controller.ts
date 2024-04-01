@@ -13,7 +13,8 @@ lessonController
   // Create lesson
   .post(
     "/create",
-    // Authorization,checkRole,
+    Authorization,
+    checkRole,
     async (req: express.Request, res: express.Response) => {
       try {
         const formLesson: ILesson = req.body;
@@ -30,32 +31,43 @@ lessonController
   )
   // Delete lesson
   .delete(
-    "/delete/:id",Authorization,checkRole,
+    "/delete/:id",
+    Authorization,
+    checkRole,
     async (req: express.Request, res: express.Response) => {
       try {
         const lessonId = Number(req.params.id);
         await lessonService.deleteLesson(lessonId);
         res.status(StatusCode.OK).json({ msg: msg.DELETE("LESSON") });
-      } catch (error) {
-        res
-          .status(StatusCode.INTERNAL_SERVER_ERROR)
-          .json({ msg: msg.INTERNAL_SERVER_ERROR("DELETE LESSON") });
+      } catch (error: any) {
+        if (error.status === 404) {
+          res.status(error.status).json({ msg: error.msg });
+        } else {
+          res
+            .status(StatusCode.INTERNAL_SERVER_ERROR)
+            .json({ msg: msg.INTERNAL_SERVER_ERROR("DELETE LESSON") });
+        }
       }
     }
   )
   // Update lesson
   .patch(
-    "/update/:id",Authorization,
+    "/update/:id",
+    Authorization,
     async (req: express.Request, res: express.Response) => {
       try {
         const lessonId = Number(req.params.id);
         const formLesson: ILesson = req.body;
         await lessonService.updateLesson(lessonId, formLesson);
         res.status(StatusCode.OK).json({ msg: msg.UPDATE("LESSON") });
-      } catch (error) {
-        res
-          .status(StatusCode.INTERNAL_SERVER_ERROR)
-          .json({ msg: msg.INTERNAL_SERVER_ERROR("UPDATE LESSON") });
+      } catch (error: any) {
+        if (error.status === 404) {
+          res.status(error.status).json({ msg: error.msg });
+        } else {
+          res
+            .status(StatusCode.INTERNAL_SERVER_ERROR)
+            .json({ msg: msg.INTERNAL_SERVER_ERROR("UPDATE LESSON") });
+        }
       }
     }
   );

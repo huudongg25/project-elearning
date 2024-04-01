@@ -21,11 +21,6 @@ export const CommentCourse = sequelize.define('commentCourses',{
         type: DataTypes.STRING,
         allowNull: false
     },
-    isActive: {
-        type: DataTypes.TINYINT,
-        allowNull: false,
-        defaultValue: 0
-    },
 },{timestamps:true})
 
 CommentCourse.belongsTo(Course,{foreignKey: "courseId", onDelete: "CASCADE", onUpdate:"CASCADE"})

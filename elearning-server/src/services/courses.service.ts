@@ -1,6 +1,8 @@
+import { MessageCodeResponse } from "../common/messageResponse.common";
+import { StatusCode } from "../common/variableResponse.common";
 import { CourseRepository } from "../repositories/courses.repository";
 import { ICourse } from "../types";
-
+const msg = new MessageCodeResponse();
 export class CourseService {
   private _courseRepository: CourseRepository;
   constructor() {
@@ -19,7 +21,13 @@ export class CourseService {
   }
 
   async deleteCourse(id: number): Promise<void> {
-    await this._courseRepository.deleteCourse(id);
+    const result = await this._courseRepository.deleteCourse(id);
+    if (result === 0) {
+      throw {
+        status: StatusCode.NOT_FOUND,
+        msg: msg.NOT_FOUND("ID COURSE"),
+      };
+    }
   }
 
   async updateCourse(
@@ -32,14 +40,26 @@ export class CourseService {
         ...formUpdate,
         image: fileImage.path,
       };
-      await this._courseRepository.updateCourse(id, newForm);
+      const result = await this._courseRepository.updateCourse(id, newForm);
+      if (result[0] === 0) {
+        throw {
+          status: StatusCode.NOT_FOUND,
+          msg: msg.NOT_FOUND("ID COURSE"),
+        };
+      }
     } else {
-      await this._courseRepository.updateCourse(id, formUpdate);
+      const result = await this._courseRepository.updateCourse(id, formUpdate);
+      if (result[0] === 0) {
+        throw {
+          status: StatusCode.NOT_FOUND,
+          msg: msg.NOT_FOUND("ID COURSE"),
+        };
+      }
     }
   }
 
   async getAllCourses(
-    role:string,
+    role: string,
     keySort: string,
     search: string,
     sort: string,
@@ -57,6 +77,14 @@ export class CourseService {
     );
   }
   async getDetailCourse(id: number): Promise<any> {
-    return await this._courseRepository.getDetailCourse(id);
+    const result =  await this._courseRepository.getDetailCourse(id);
+    if (result === null) {
+      throw {
+        status: StatusCode.NOT_FOUND,
+        msg: msg.NOT_FOUND("ID COURSE"),
+      }
+    }else {
+      return result;
+    }
   }
 }

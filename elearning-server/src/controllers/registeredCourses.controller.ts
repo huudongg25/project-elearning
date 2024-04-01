@@ -14,11 +14,15 @@ registerCourseController
       const form = req.body;
       const user = req.user
       const email = user.email
+      console.log(form, "formReq");
+      
       await registerCourseService.create(form,email);
       res
         .status(StatusCode.CREATED)
         .json({ msg: msg.CREATED("REGISTER COURSE") });
     } catch (error) {
+      console.log(error);
+      
       res
         .status(StatusCode.INTERNAL_SERVER_ERROR)
         .json({ msg: msg.INTERNAL_SERVER_ERROR("REGISTER COURSE") });
@@ -92,7 +96,7 @@ registerCourseController
   })
   // Hoàn thành bài học
   .patch("/finished-lessons", 
-  // Authorization,
+  Authorization,
    async (req:express.Request, res:express.Response) => {
     try {
       const userId = Number(req.body.userId);
