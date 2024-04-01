@@ -79,10 +79,14 @@ userController
         const fileAvatar = req.file as Express.Multer.File;
         await userService.updateProfile(id, fileAvatar);
         res.status(StatusCode.OK).json({ msg: msg.UPDATE("USER") });
-      } catch (error) {
-        res
-          .status(StatusCode.INTERNAL_SERVER_ERROR)
-          .json({ msg: msg.INTERNAL_SERVER_ERROR("UPDATE USER") });
+      } catch (error: any) {
+        if (error.status === 404) {
+          res.status(error.status).json({ msg: error.msg });
+        } else {
+          res
+            .status(StatusCode.INTERNAL_SERVER_ERROR)
+            .json({ msg: msg.INTERNAL_SERVER_ERROR("UPDATE USER") });
+        }
       }
     }
   )
@@ -93,13 +97,17 @@ userController
     async (req: express.Request, res: express.Response) => {
       try {
         const id = Number(req.params.id);
-        const key = req.query.key;
+        const key = req.body.key;
         await userService.block(id, key);
         res.status(StatusCode.OK).json({ msg: msg.UPDATE("BLOCK USER") });
-      } catch (error) {
-        res
-          .status(StatusCode.INTERNAL_SERVER_ERROR)
-          .json({ msg: msg.INTERNAL_SERVER_ERROR("BLOCK USER") });
+      } catch (error: any) {
+        if (error.status === 404) {
+          res.status(error.status).json({ msg: error.msg });
+        } else {
+          res
+            .status(StatusCode.INTERNAL_SERVER_ERROR)
+            .json({ msg: msg.INTERNAL_SERVER_ERROR("BLOCK USER") });
+        }
       }
     }
   )
@@ -110,13 +118,17 @@ userController
     async (req: express.Request, res: express.Response) => {
       try {
         const id = Number(req.params.id);
-        const key = req.query.key;
+        const key = req.body.key;
         await userService.unblock(id, key);
         res.status(StatusCode.OK).json({ msg: msg.UPDATE("UNBLOCK USER") });
-      } catch (error) {
-        res
-          .status(StatusCode.INTERNAL_SERVER_ERROR)
-          .json({ msg: msg.INTERNAL_SERVER_ERROR("UNBLOCK USER") });
+      } catch (error: any) {
+        if (error.status === 404) {
+          res.status(error.status).json({ msg: error.msg });
+        } else {
+          res
+            .status(StatusCode.INTERNAL_SERVER_ERROR)
+            .json({ msg: msg.INTERNAL_SERVER_ERROR("UNBLOCK USER") });
+        }
       }
     }
   )
@@ -155,4 +167,4 @@ userController
           .json({ msg: msg.INTERNAL_SERVER_ERROR("GET USER") });
       }
     }
-  })
+  });

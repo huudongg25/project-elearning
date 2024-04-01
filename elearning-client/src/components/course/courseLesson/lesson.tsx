@@ -60,7 +60,7 @@ const Learning = () => {
     if (result.completedLessons === result.totalLessons) {
       const result = await rateService.getOneRate(user.id, Number(courseId));
       if (!result) {
-        setIsRate(false);
+        setIsRate(true);
       }
       setSpin(false);
     }
@@ -200,25 +200,36 @@ const Learning = () => {
   };
   const handleCreateComment = async () => {
     setSpin(true);
-    if (createComment === "") {
-      setSpin(false);
+    if (user?.isCommentBlocked === 0) {
+      if (createComment === "") {
+        setSpin(false);
+      } else {
+        await commentService.createComment(
+          user.id,
+          Number(courseId),
+          createComment
+        );
+        setCreateComment("");
+        getComments();
+        getCountComments();
+        setSpin(false);
+        toast.success("Bình luận thành công!", {
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
     } else {
-      await commentService.createComment(
-        user.id,
-        Number(courseId),
-        createComment
-      );
-      setCreateComment("");
-      getComments();
-      getCountComments();
-      setSpin(false);
-      toast.success("Bình luận thành công!", {
+      toast.error("Bạn đã bị khóa bình luận!", {
         style: {
           borderRadius: "10px",
           background: "#333",
           color: "#fff",
         },
       });
+      setSpin(false);
     }
   };
   const offIsRate = () => {

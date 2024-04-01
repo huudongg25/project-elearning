@@ -5,11 +5,11 @@ export class LessonRepository {
         await Lesson.create(formLesson);
     }
 
-    async deleteLesson(id: number): Promise<void> {
-        await Lesson.destroy({ where: { id } });
+    async deleteLesson(id: number): Promise<number> {
+       return await Lesson.destroy({ where: { id } });
     }
 
-    async updateLesson(id: number, formLesson: any): Promise<void> {
-        await Lesson.update(formLesson, { where: { id } });
+    async updateLesson(id: number, formLesson: any): Promise<number[]> {
+       return await Lesson.update(formLesson, { where: { id } });
     }
 }

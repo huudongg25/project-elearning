@@ -55,18 +55,44 @@ export class UserService {
     const newProfile = {
       avatar: fileAvatar.path,
     };
-    await this._userRepository.updateProfile(id, newProfile);
+    const result = await this._userRepository.updateProfile(id, newProfile);
+    if (result[0] === 0) {
+      throw {
+        status: StatusCode.NOT_FOUND,
+        msg: msg.NOT_FOUND("ID USER"),
+      };
+    }
   }
 
   async block(id: number, key: any): Promise<void> {
     const formBlock = { [key]: 1 };
-    await this._userRepository.updateProfile(id, formBlock);
+    const result = await this._userRepository.updateProfile(id, formBlock);
+    if (result[0] === 0) {
+      throw {
+        status: StatusCode.NOT_FOUND,
+        msg: msg.NOT_FOUND("ID USER"),
+      };
+    }
   }
   async unblock(id: number, key: any): Promise<void> {
     const formUnblock = { [key]: 0 };
-    await this._userRepository.updateProfile(id, formUnblock);
+    const result = await this._userRepository.updateProfile(id, formUnblock);
+    if (result[0] === 0) {
+      throw {
+        status: StatusCode.NOT_FOUND,
+        msg: msg.NOT_FOUND("ID USER"),
+      };
+    }
   }
   async getById(id: number): Promise<any> {
-    return await this._userRepository.getById(id);
+    const result = await this._userRepository.getById(id);
+    if (result === null) {
+      throw {
+        status: StatusCode.NOT_FOUND,
+        msg: msg.NOT_FOUND("ID USER"),
+      };
+    } else {
+      return result;
+    }
   }
 }

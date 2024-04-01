@@ -13,6 +13,8 @@ const PaypalComponent = (props: Props) => {
   const user = JSON.parse(localStorage.getItem("user") as string);
   const registeredCourse = new RegisteredCourseService();
   const handlePaymentSuccess = async () => {
+    console.log(props.data);
+    
     const form = {
       courseId: props.data?.id,
       userId: user.id,
@@ -28,7 +30,6 @@ const PaypalComponent = (props: Props) => {
       },
     });
   };
-
   return (
     <PayPalButtons
       style={{

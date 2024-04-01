@@ -1,6 +1,8 @@
+import { MessageCodeResponse } from "../common/messageResponse.common";
+import { StatusCode } from "../common/variableResponse.common";
 import { CommentCourseRepository } from "../repositories/commentCourses.repository";
 import { IComment } from "../types";
-
+const msg = new MessageCodeResponse();
 export class CommentCourseService {
   private _commentCourseRepository: CommentCourseRepository;
   constructor() {
@@ -11,20 +13,32 @@ export class CommentCourseService {
     await this._commentCourseRepository.create(form);
   }
 
-  async active(commentId: number): Promise<void> {
-    await this._commentCourseRepository.active(commentId);
-  }
-
   async delete(commentId: number): Promise<void> {
-    await this._commentCourseRepository.delete(commentId);
+    const result = await this._commentCourseRepository.delete(commentId);
+    if (result === 0) {
+      throw {
+        status: StatusCode.NOT_FOUND,
+        msg: msg.NOT_FOUND("ID COMMENT"),
+      };
+    }
   }
 
-  async getAll(key:string,page:number,limit:number,courseId:number|undefined): Promise<any> {
-    const offset = Math.ceil((page - 1) * limit)
-    return await this._commentCourseRepository.getAll(key,offset,limit,courseId);
+  async getAll(
+    search: string,
+    page: number,
+    limit: number,
+    courseId: number | undefined
+  ): Promise<any> {
+    const offset = Math.ceil((page - 1) * limit);
+    return await this._commentCourseRepository.getAll(
+      search,
+      offset,
+      limit,
+      courseId
+    );
   }
 
-  async getCountComment(key:string,courseId:number){
-    return await this._commentCourseRepository.getCountComment(key,courseId)
+  async getCountComment(courseId: number) {
+    return await this._commentCourseRepository.getCountComment(courseId);
   }
 }
