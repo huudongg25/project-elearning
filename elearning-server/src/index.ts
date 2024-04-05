@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   session({
-    secret: String(process.env.SS_SECRET),
+    secret: "e-learning",
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
