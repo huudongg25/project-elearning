@@ -12,7 +12,7 @@ config();
 const app = express();
 const port = process.env.PORT || 8000;
 app.use(cors({
-  origin: ["project-elearning-henna.vercel.app"],
+  origin: ["https://project-elearning-henna.vercel.app"],
   credentials: true
 }))
 app.use(bodyParser.json());
