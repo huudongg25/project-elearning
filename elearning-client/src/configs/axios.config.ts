@@ -1,6 +1,6 @@
 import axios from "axios";
 export const PrivateAxios = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://localhost:8000",
 });
 axios.defaults.withCredentials = true;
 PrivateAxios.defaults.withCredentials = true;
@@ -30,7 +30,8 @@ PrivateAxios.interceptors.response.use(
 );
 
 export const PublicAxios = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://localhost:8000",
+
 });
 axios.defaults.withCredentials = true;
 PublicAxios.defaults.withCredentials = true;
