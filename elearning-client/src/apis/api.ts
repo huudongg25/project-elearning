@@ -17,15 +17,34 @@ class Api {
     } else {
       return await PrivateAxios.patch(endpoint, data);
     }
+
   }
   async Delete(endpoint: string, id: number) {
     return await PrivateAxios.delete(`${endpoint}/${id}`);
   }
-  async Logout(endpoint: string) {
+  
+  async LogOut(endpoint: string) {
     await PrivateAxios.get(endpoint);
   }
-  async GetById(endpoint: string, id: number) {
-    return await PublicAxios.get(`${endpoint}/${id}`);
+  async GetById(endpoint: string, id?: number, data?: any) {
+    if (data) {
+      return await PrivateAxios.get(`${endpoint}/${id}`, {
+        params: { code: data },
+      });
+    } else {
+      return await PrivateAxios.get(`${endpoint}/${id}`);
+    }
+  }
+  async Search(endpoint: string, searchValue: string, id?: number) {
+    if (id) {
+      return await PrivateAxios.get(`${endpoint}/${id}`, {
+        params: { search: searchValue },
+      });
+    } else {
+      return await PrivateAxios.get(endpoint, {
+        params: { search: searchValue },
+      });
+    }
   }
   async CreatePass(endpoint: string, password: string) {
     return await PrivateAxios.patch(endpoint, { password });
@@ -33,5 +52,6 @@ class Api {
   async CreateOtp(endpoint: string, email: any) {
     return await PrivateAxios.post(endpoint, { email });
   }
+  
 }
 export default Api;

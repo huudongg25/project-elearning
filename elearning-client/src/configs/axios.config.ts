@@ -31,6 +31,7 @@ PrivateAxios.interceptors.response.use(
 
 export const PublicAxios = axios.create({
   baseURL: "http://localhost:8000",
+
 });
 axios.defaults.withCredentials = true;
 PublicAxios.defaults.withCredentials = true;
