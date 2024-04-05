@@ -261,7 +261,7 @@ const Learning = () => {
         </div>
       </div>
       <div className="learning_comments">
-        <h3>{countComments} binh luan</h3>
+        <h3>{countComments} bình luận</h3>
         <div className="learning_comments_enters">
           <img src={detailRegisteredCourse?.user?.avatar} alt="" />
           <input
@@ -269,7 +269,7 @@ const Learning = () => {
             onChange={changeComment}
             onBlur={handleBlurComment}
             onFocus={handleFocusComment}
-            placeholder="Viet binh luan o day..."
+            placeholder="Viết bình luận ở đây..."
             type="text"
           />
           <button
