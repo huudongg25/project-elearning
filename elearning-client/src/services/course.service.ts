@@ -19,7 +19,6 @@ class CoursesService {
       const result = await this.coursesRepository.getDetailCourse(courseId);
       return result.data.data[0];
     } catch (error) {
-      console.log(error);
     }
   }
   public async getCoursesById(id: number): Promise<IntfCourse> {

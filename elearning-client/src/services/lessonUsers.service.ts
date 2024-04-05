@@ -10,7 +10,6 @@ export class LessonUserService {
         try {
             await this._lessonUserRepository.cerateLessonUser(lessonId,registeredCourseId)
         } catch (error) {
-            console.log(error);
         }
     }
 
@@ -22,7 +21,6 @@ export class LessonUserService {
             }
             await this._lessonUserRepository.updateStateLessonUser(form)
         } catch (error) {
-            console.log(error);
         }
     }
 }

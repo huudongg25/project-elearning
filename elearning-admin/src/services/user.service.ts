@@ -8,12 +8,10 @@ class UserService {
   public async login(formRequest: any): Promise<any> {
     try {
       const data = await this.userRepository.login(formRequest);
-      console.log(data.status);
 
       if (data.status === 201) {
         return data.data;
       } else {
-        console.log("Login failed");
       }
     } catch (error: any) {
       if (error.response.status === 404) {
@@ -34,7 +32,6 @@ class UserService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async active(id: number) {
@@ -46,7 +43,6 @@ class UserService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async block(id: number) {
@@ -58,7 +54,6 @@ class UserService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async searchUsers(searchValue: string) {
@@ -70,7 +65,6 @@ class UserService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async createAdmin(formAdmin: any) {
@@ -82,7 +76,6 @@ class UserService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async getAllAdmins() {
@@ -94,7 +87,6 @@ class UserService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async deleteAdmin(id: number) {
@@ -106,7 +98,6 @@ class UserService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
 }

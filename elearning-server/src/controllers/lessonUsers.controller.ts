@@ -14,7 +14,6 @@ lessonUserController
       await lessonUserService.createLessonUser(form);
       res.status(StatusCode.CREATED).json({ msg: msg.CREATED("LESSON USER") });
     } catch (error) {
-      console.log(error);
       
       res
         .status(StatusCode.INTERNAL_SERVER_ERROR)

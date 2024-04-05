@@ -18,7 +18,6 @@ class CourseService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async addCourse(data: any) {
@@ -30,7 +29,6 @@ class CourseService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async updateCourse(id: number, data: any) {
@@ -42,7 +40,6 @@ class CourseService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
 

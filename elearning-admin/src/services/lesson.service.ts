@@ -17,7 +17,6 @@ class LessonService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async addLesson(data: any) {
@@ -29,7 +28,6 @@ class LessonService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
 
@@ -42,7 +40,6 @@ class LessonService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async deleteLesson(id: number) {

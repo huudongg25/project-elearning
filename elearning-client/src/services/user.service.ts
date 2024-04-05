@@ -15,7 +15,6 @@ class UserService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async login(formLogin: IntfLogin) {
@@ -33,7 +32,6 @@ class UserService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
 
@@ -46,7 +44,6 @@ class UserService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async confirmOtp(confirmOtp: number) {
@@ -58,7 +55,6 @@ class UserService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
   public async getById(id: number) {
@@ -66,7 +62,6 @@ class UserService {
       const result = await this._userRepository.getById(id);
       return result.data  
     } catch (error) {
-      console.log(error);
     }
   }
 }

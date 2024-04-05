@@ -14,14 +14,12 @@ registerCourseController
       const form = req.body;
       const user = req.user
       const email = user.email
-      console.log(form, "formReq");
       
       await registerCourseService.create(form,email);
       res
         .status(StatusCode.CREATED)
         .json({ msg: msg.CREATED("REGISTER COURSE") });
     } catch (error) {
-      console.log(error);
       
       res
         .status(StatusCode.INTERNAL_SERVER_ERROR)
@@ -47,7 +45,6 @@ registerCourseController
         .status(StatusCode.OK)
         .json({ msg: msg.GET("REGISTERS COURSE"), data: result });
     } catch (error) {
-      console.log(error);
       
       res
         .status(StatusCode.INTERNAL_SERVER_ERROR)

@@ -16,7 +16,6 @@ class CommentService {
         return 2;
       }
     } catch (error) {
-      console.log(error);
     }
   }
 }

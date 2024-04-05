@@ -17,7 +17,6 @@ export class CommentService {
       const result = await this._commentRepository.getComments(form);
       return result.data.data
     } catch (error) {
-      console.log(error);
     }
   }
 
@@ -30,7 +29,6 @@ export class CommentService {
         const result = await this._commentRepository.getCountComment(form)
         return result.data.count
     } catch (error) {
-        console.log(error);
         
     }
   }

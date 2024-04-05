@@ -13,7 +13,6 @@ const PaypalComponent = (props: Props) => {
   const user = JSON.parse(localStorage.getItem("user") as string);
   const registeredCourse = new RegisteredCourseService();
   const handlePaymentSuccess = async () => {
-    console.log(props.data);
     
     const form = {
       courseId: props.data?.id,
@@ -51,7 +50,6 @@ const PaypalComponent = (props: Props) => {
             ],
           });
         } catch (error) {
-          console.log(error);
         }
       }}
       onApprove={(_: any, actions: any) => {

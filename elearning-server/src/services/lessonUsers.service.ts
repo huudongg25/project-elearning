@@ -9,7 +9,6 @@ export class LessonUserService {
 
   async createLessonUser(formLessonUser: any): Promise<void> {
     const check = await this._lessonUserRepository.checkLessonUser(formLessonUser);
-    console.log(check, Date.now());
     if (check.length === 0) {
       await this._lessonUserRepository.createLessonUser(formLessonUser);
     }

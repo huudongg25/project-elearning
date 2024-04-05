@@ -15,7 +15,6 @@ export class RegisteredCourseService {
             const result = await this._registeredCourseRepository.getDetailRegisteredCourseUser(form)
             return result.data.data[0]
         } catch (error) {
-            console.log(error);
         }
     }
 
@@ -28,7 +27,6 @@ export class RegisteredCourseService {
             }
             await this._registeredCourseRepository.updateStateCourseUser(form)
         } catch (error) {
-            console.log(error);
         }
     }
 
@@ -36,7 +34,6 @@ export class RegisteredCourseService {
         try {
             await this._registeredCourseRepository.create(form)
         } catch (error) {
-            console.log(error);
         }
     }
     
@@ -45,7 +42,6 @@ export class RegisteredCourseService {
             const result = await this._registeredCourseRepository.getHistory(userId)
             return result.data.data
         } catch (error) {
-            console.log(error);
         }
     }
 }

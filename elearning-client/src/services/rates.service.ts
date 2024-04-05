@@ -28,7 +28,6 @@ export class RateService {
       const result = await this._rateRepository.getOneRate(form);
       return result.data.data;
     } catch (error) {
-      console.log(error);
     }
   }
 }

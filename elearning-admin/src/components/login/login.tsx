@@ -53,7 +53,6 @@ const AdminLogin = () => {
       });
     } else {
       const result = await userService.login(loginData);
-      console.log(result);
 
       if (result === 0) {
         ToastWarning("Username is incorrect");

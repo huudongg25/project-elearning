@@ -19,7 +19,6 @@ const MyCourses = () => {
     setSpin(true);
     getData();
   }, []);
-  console.log(data);
   
   return (
     <section className="my_course">
