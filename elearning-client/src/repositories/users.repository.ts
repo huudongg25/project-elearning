@@ -13,7 +13,7 @@ class UserRepository {
     return await this._api.Post("/auth/login", formLogin);
   }
   public async logout() {
-    await this._api.Logout("/users/logout");
+    await this._api.LogOut("/users/logout");
   }
   public async getById(id: number): Promise<any> {
     return await this._api.GetById("/users/get", id);
